@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:17-alpine
+    ports:
+      - '5434:5432'
+    environment:
+      POSTGRES_DB: template-test
+      POSTGRES_USER: template
+      POSTGRES_PASSWORD: password
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U template -d template-test']
+      interval: 5s
+      timeout: 5s
+      retries: 5

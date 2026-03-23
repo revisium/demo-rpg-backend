@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+
+# Generated (Prisma client is committed — no prisma generate needed in CI)
+# src/__generated__/
+
+# Environment
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+
+# Logs
+*.log
+
+# Test
+test-results/
+
+# Revisium standalone data
+revisium/data/
+
+# Generated dictionary API client
+src/features/dictionary/generated/

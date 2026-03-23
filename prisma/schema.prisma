@@ -1,0 +1,175 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/__generated__/client"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Auth ───────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(nanoid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email    String  @unique
+  username String  @unique
+  password String
+  roleId   String
+  role     Role    @relation(fields: [roleId], references: [id])
+
+  oauthAuthorizationCodes OAuthAuthorizationCode[]
+  oauthAccessTokens       OAuthAccessToken[]
+  oauthRefreshTokens      OAuthRefreshToken[]
+
+  tasks Task[]
+
+  tokenVersion  Int            @default(0)
+  refreshTokens RefreshToken[]
+
+  @@index([email])
+  @@index([roleId])
+}
+
+model Role {
+  id        String   @id
+  createdAt DateTime @default(now())
+
+  name        String
+  level       Int          @default(0)
+  isCustom    Boolean      @default(false)
+  permissions Permission[]
+  users       User[]
+}
+
+model Permission {
+  id        String   @id @default(nanoid())
+  createdAt DateTime @default(now())
+
+  action    String
+  subject   String
+  condition Json?
+
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id])
+
+  @@index([roleId])
+}
+
+// ─── OAuth ──────────────────────────────────────────────────
+
+model OAuthClient {
+  id               String   @id @default(nanoid())
+  createdAt        DateTime @default(now())
+  clientSecretHash String
+  clientName       String   @db.VarChar(255)
+  redirectUris     String[]
+  grantTypes       String[] @default(["authorization_code", "refresh_token"])
+
+  authorizationCodes OAuthAuthorizationCode[]
+  accessTokens       OAuthAccessToken[]
+  refreshTokens      OAuthRefreshToken[]
+}
+
+model OAuthAuthorizationCode {
+  id        String   @id @default(nanoid())
+  createdAt DateTime @default(now())
+
+  code          String   @unique
+  codeChallenge String
+  redirectUri   String
+  scope         String?
+  expiresAt     DateTime
+  usedAt        DateTime?
+
+  clientId String
+  client   OAuthClient @relation(fields: [clientId], references: [id])
+  userId   String
+  user     User        @relation(fields: [userId], references: [id])
+
+  @@index([clientId])
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model OAuthAccessToken {
+  id        String   @id @default(nanoid())
+  createdAt DateTime @default(now())
+
+  tokenHash String   @unique
+  scope     String?
+  expiresAt DateTime
+  revokedAt DateTime?
+
+  clientId String
+  client   OAuthClient @relation(fields: [clientId], references: [id])
+  userId   String
+  user     User        @relation(fields: [userId], references: [id])
+
+  @@index([clientId])
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model OAuthRefreshToken {
+  id        String   @id @default(nanoid())
+  createdAt DateTime @default(now())
+
+  tokenHash  String    @unique
+  scope      String?
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  lastUsedAt DateTime?
+
+  clientId String
+  client   OAuthClient @relation(fields: [clientId], references: [id])
+  userId   String
+  user     User        @relation(fields: [userId], references: [id])
+
+  @@index([clientId])
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model RefreshToken {
+  id        String    @id @default(nanoid())
+  tokenHash String    @unique @db.VarChar(64)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  familyId  String
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([tokenHash])
+  @@index([userId])
+  @@index([familyId])
+  @@index([expiresAt])
+}
+
+// ─── Example Domain: Task ───────────────────────────────────
+
+model Task {
+  id        String   @id @default(nanoid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
+  status      TaskStatus @default(PENDING)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}

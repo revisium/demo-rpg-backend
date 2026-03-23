@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24.11.1
+          cache: 'npm'
+
+      - run: cp .env.example .env
+
+      - run: npm ci
+
+      - run: npm run lint:ci
+
+      - run: npm run tsc
+
+      - name: Start test database
+        run: docker compose -f docker/docker-compose-test.yml -p template-test up -d
+
+      - name: Wait for database
+        run: sleep 3
+
+      - name: Run migrations
+        run: npx dotenv-cli -e .env.test -- npx prisma migrate deploy
+
+      - name: Run seed
+        run: npx dotenv-cli -e .env.test -- npm run seed
+
+      - name: Run tests with coverage
+        run: npx dotenv-cli -e .env.test -- npm run test:cov
+
+      - name: Stop test database
+        if: always()
+        run: docker compose -f docker/docker-compose-test.yml -p template-test down --volumes
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
