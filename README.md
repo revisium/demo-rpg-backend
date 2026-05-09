@@ -1,28 +1,44 @@
-# template-nestjs-api
+# demo-rpg-backend
 
-Production-ready NestJS backend template with CQRS, three API layers, and enterprise infrastructure.
+NestJS subgraph for **Branching Tales** — an Apollo Router topology federating this service with two Revisium-managed subgraphs (`revisium/demo-rpg-data`, `revisium/demo-rpg-cms`).
+
+Forked from [`revisium/template-nestjs-api`](https://github.com/revisium/template-nestjs-api). The README + spec live in [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs); this repo is the running NestJS application that wraps and extends the Revisium-hosted game data.
+
+## Role in the demo
+
+```
+        ┌─────────────────────────┐
+        │   Apollo Router         │
+        │   (federated supergraph)│
+        └──┬──────┬──────┬────────┘
+           │      │      │
+   ┌───────▼─┐  ┌─▼──┐  ┌▼─────────────┐
+   │ this    │  │demo│  │ demo-rpg-cms │
+   │ subgraph│  │-rpg│  │ (Revisium)   │
+   │ (NestJS)│  │data│  └──────────────┘
+   └─────────┘  └────┘
+                       supergraph composed by
+                       revisium/supergraph-builder
+```
+
+`demo-rpg-backend` adds business logic that doesn't fit a Revisium row (auth, computed cross-table fields, write paths, application-layer validation) and exposes it as a Yoga Federation v2 subgraph.
 
 ## Features
 
 - **CQRS** — Command/Query separation with `@nestjs/cqrs`
-- **GraphQL** — Yoga Federation v2, code-first, GraphiQL
+- **GraphQL** — Yoga Federation v2 (subgraph for Apollo Router), GraphiQL
 - **REST API** — Swagger/OpenAPI documentation
 - **MCP** — Model Context Protocol for AI agent integration
 - **OAuth** — PKCE authorization code flow (for MCP clients)
 - **Auth** — JWT + Passport + CASL ability-based permissions
-- **Prisma** — PostgreSQL with type-safe ORM
-- **Caching** — In-memory with TTL (upgradeable to BentoCache L1+L2)
+- **Prisma** — PostgreSQL with type-safe ORM (for backend-owned tables; game data stays in Revisium)
+- **Revisium client** — connects to `cloud.revisium.io/revisium/demo-rpg-data` and `…/demo-rpg-cms`
+- **Caching** — BentoCache (L1 memory + L2 Redis with bus invalidation)
 - **Logging** — Pino with trace ID propagation (CLS)
 - **Metrics** — Prometheus with custom counters/histograms
 - **Health** — Terminus health checks
 - **Docker** — Multi-stage build, non-root user
 - **CI/CD** — GitHub Actions (lint, tsc, test, SonarQube, Docker build)
-- **ESLint** — Strict config with sonarjs plugin
-- **TypeScript** — Strict mode with `noUncheckedIndexedAccess`
-
-## After Fork
-
-See **[docs/after-fork.md](docs/after-fork.md)** — step-by-step guide: rename project, replace example domain, set up Docker Hub, SonarCloud, and other integrations. Delete the file when done.
 
 ## Quick Start
 
@@ -30,16 +46,19 @@ See **[docs/after-fork.md](docs/after-fork.md)** — step-by-step guide: rename 
 # 1. Install dependencies
 npm install
 
-# 2. Start PostgreSQL + Redis
+# 2. Start PostgreSQL + Redis (for backend-owned tables only)
 docker compose -f docker/docker-compose.yml up -d
 
-# 3. Configure environment
+# 3. Configure environment (point REVISIUM_* at the demo cloud projects)
 cp .env.example .env
+# Edit .env and set:
+#   REVISIUM_DEMO_RPG_DATA_URL=https://cloud.revisium.io/revisium/demo-rpg-data
+#   REVISIUM_DEMO_RPG_CMS_URL=https://cloud.revisium.io/revisium/demo-rpg-cms
 
 # 4. Generate Prisma client
 npm run prisma:generate
 
-# 5. Create database schema
+# 5. Create database schema for backend-owned tables (auth, sessions)
 npm run prisma:migrate:dev
 
 # 6. Seed roles, permissions, admin user
@@ -50,13 +69,15 @@ npm run start:dev
 ```
 
 After startup:
-- **GraphQL**: http://localhost:8080/graphql (GraphiQL)
+- **GraphQL subgraph**: http://localhost:8080/graphql (GraphiQL)
 - **REST API**: http://localhost:8080/api (Swagger UI)
+- **MCP endpoint**: http://localhost:8080/mcp (POST)
 - **Health**: http://localhost:8080/health
+- **Metrics**: http://localhost:8080/metrics
 
-Login: `admin@example.com` / `admin123` (or set `NO_AUTH=true` in `.env` for dev mode)
+Login: `admin@example.com` / `admin123` (or set `NO_AUTH=true` in `.env` for dev mode).
 
-See [docs/getting-started.md](docs/getting-started.md) for detailed setup and first requests.
+See [`docs/getting-started.md`](docs/getting-started.md) for detailed setup.
 
 ## Documentation
 
@@ -72,7 +93,7 @@ See [docs/getting-started.md](docs/getting-started.md) for detailed setup and fi
 | [Auth & Permissions](docs/auth-and-permissions.md) | JWT, CASL, guards, roles |
 | [JWT Lifecycle](docs/jwt-lifecycle.md) | Token rotation, cookies, refresh, revocation |
 | [Prisma](docs/prisma.md) | Schema, migrations, seed, transactions |
-| [Caching](docs/caching.md) | In-memory cache, BentoCache upgrade path |
+| [Caching](docs/caching.md) | BentoCache, invalidation, stable keys |
 | [Logging & Tracing](docs/logging-and-tracing.md) | Pino, trace IDs, structured logs |
 | [Metrics](docs/metrics.md) | Prometheus, custom metrics |
 | [Health Checks](docs/health-checks.md) | Terminus, K8s probes |
@@ -80,22 +101,12 @@ See [docs/getting-started.md](docs/getting-started.md) for detailed setup and fi
 | [Docker](docs/docker.md) | Dev compose, production build |
 | [CI/CD](docs/ci-cd.md) | GitHub Actions workflows |
 | [SonarQube](docs/sonarqube.md) | SonarCloud setup, quality gates |
-| [Environment Variables](ENV.md) | Complete env var reference (root file) |
+| [Environment Variables](ENV.md) | Complete env var reference |
 | [Adding a New Domain](docs/adding-new-domain.md) | Step-by-step guide |
-| [Dictionary Service](docs/dictionary-service.md) | Revisium integration, migrations, standalone |
+| [Dictionary Service](docs/dictionary-service.md) | Revisium integration, migrations |
 | [Adding MCP Tools](docs/adding-mcp-tools.md) | Tool creation guide |
 | [Deployment](docs/deployment.md) | K8s manifests, production checklist |
 | [Code Review](REVIEW.md) | Architecture, SOLID, testing, authorization checklist |
-
-## Endpoints
-
-| URL | Description |
-|---|---|
-| `/graphql` | GraphiQL |
-| `/api` | Swagger UI (REST API) |
-| `/mcp` | MCP endpoint (POST) |
-| `/health` | Health check |
-| `/metrics` | Prometheus metrics |
 
 ## Tech Stack
 
@@ -106,13 +117,19 @@ See [docs/getting-started.md](docs/getting-started.md) for detailed setup and fi
 | GraphQL | Yoga Federation v2 + @nestjs/graphql |
 | Database | PostgreSQL 17 + Prisma 7 |
 | Auth | JWT + Passport + CASL |
-| Cache | In-memory (BentoCache-ready) |
+| Cache | BentoCache (L1 + L2 Redis) |
 | Logging | Pino + nestjs-cls |
 | Metrics | Prometheus (prom-client) |
 | Testing | Jest + @swc/jest |
 | Linting | ESLint + sonarjs + Prettier |
 | CI | GitHub Actions |
 | Container | Docker (multi-stage) |
+
+## Related repos
+
+- [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs) — project passport, ADRs, schemas, formulas, bootstrap source
+- [`revisium/template-nestjs-api`](https://github.com/revisium/template-nestjs-api) — upstream template; sync periodically
+- [`revisium/supergraph-builder`](https://github.com/revisium/supergraph-builder) — composes this subgraph + the two Revisium subgraphs into the Apollo Router supergraph
 
 ## License
 

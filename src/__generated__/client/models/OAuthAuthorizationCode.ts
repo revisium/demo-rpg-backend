@@ -193,7 +193,7 @@ export type OAuthAuthorizationCodeGroupByOutputType = {
   _max: OAuthAuthorizationCodeMaxAggregateOutputType | null
 }
 
-type GetOAuthAuthorizationCodeGroupByPayload<T extends OAuthAuthorizationCodeGroupByArgs> = Prisma.PrismaPromise<
+export type GetOAuthAuthorizationCodeGroupByPayload<T extends OAuthAuthorizationCodeGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<OAuthAuthorizationCodeGroupByOutputType, T['by']> &
       {
