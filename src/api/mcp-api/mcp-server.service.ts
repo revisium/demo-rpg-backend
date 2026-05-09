@@ -2,12 +2,12 @@ import { Injectable, ForbiddenException } from '@nestjs/common';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { CaslAbilityFactory } from 'src/features/auth/casl-ability.factory';
 import { McpAuthHelpers, McpUserContext } from './types';
-import { TaskTools } from './tools/task.tools';
+import { RegionsTools } from './tools/regions.tools';
 
 @Injectable()
 export class McpServerService {
   constructor(
-    private readonly taskTools: TaskTools,
+    private readonly regionsTools: RegionsTools,
     private readonly caslAbilityFactory: CaslAbilityFactory,
   ) {}
 
@@ -24,6 +24,6 @@ export class McpServerService {
       },
     };
 
-    this.taskTools.register(server, auth);
+    this.regionsTools.register(server, auth);
   }
 }

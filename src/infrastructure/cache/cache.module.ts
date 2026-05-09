@@ -5,7 +5,6 @@ import { CACHE_SERVICE } from './cache.tokens';
 import { CacheService } from './services/cache.service';
 import { NoopCacheService } from './services/noop-cache.service';
 import { AuthCacheService } from './services/auth-cache.service';
-import { TaskCacheService } from './services/task-cache.service';
 import { CACHE_EVENT_HANDLERS } from './handlers';
 
 @Module({})
@@ -77,10 +76,9 @@ export class CacheModule {
         },
         CacheService,
         AuthCacheService,
-        TaskCacheService,
         ...CACHE_EVENT_HANDLERS,
       ],
-      exports: [CacheService, AuthCacheService, TaskCacheService, CACHE_SERVICE],
+      exports: [CacheService, AuthCacheService, CACHE_SERVICE],
     };
   }
 }

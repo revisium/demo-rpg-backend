@@ -20,6 +20,6 @@ export enum PermissionAction {
 
 export enum PermissionSubject {
   all = 'all',
-  Task = 'Task',
+  Region = 'Region',
   User = 'User',
 }

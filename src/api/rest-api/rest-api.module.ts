@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from 'src/features/auth/auth.module';
-import { TaskModule } from 'src/features/task/task.module';
-import { TaskController } from './task/task.controller';
+import { RegionsModule } from 'src/features/regions/regions.module';
+import { RegionsController } from './regions/regions.controller';
 import { AuthController } from './auth/auth.controller';
 
 @Module({
-  imports: [AuthModule, TaskModule],
-  controllers: [TaskController, AuthController],
+  imports: [AuthModule, RegionsModule],
+  controllers: [RegionsController, AuthController],
 })
 export class RestApiModule {}

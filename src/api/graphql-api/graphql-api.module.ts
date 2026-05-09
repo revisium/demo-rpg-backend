@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { YogaFederationDriver, YogaFederationDriverConfig } from '@graphql-yoga/nestjs-federation';
 import { AuthModule } from 'src/features/auth/auth.module';
-import { TaskModule } from 'src/features/task/task.module';
-import { TaskResolver } from './task/task.resolver';
+import { RegionsModule } from 'src/features/regions/regions.module';
+import { RegionsResolver } from './regions/regions.resolver';
 import { AuthResolver } from './auth/auth.resolver';
 
 @Module({
@@ -16,8 +16,8 @@ import { AuthResolver } from './auth/auth.resolver';
       context: ({ req, res }: { req: unknown; res: unknown }) => ({ req, res }),
     }),
     AuthModule,
-    TaskModule,
+    RegionsModule,
   ],
-  providers: [TaskResolver, AuthResolver],
+  providers: [RegionsResolver, AuthResolver],
 })
 export class GraphqlApiModule {}

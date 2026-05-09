@@ -20,12 +20,7 @@ const ROLES: Record<string, RoleConfig> = {
     id: 'user',
     name: 'User',
     level: 1,
-    permissions: [
-      { action: 'read', subject: 'Task' },
-      { action: 'create', subject: 'Task' },
-      { action: 'update', subject: 'Task', condition: { userId: '${userId}' } },
-      { action: 'delete', subject: 'Task', condition: { userId: '${userId}' } },
-    ],
+    permissions: [{ action: 'read', subject: 'Region' }],
   },
 };
 

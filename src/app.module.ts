@@ -9,7 +9,7 @@ import { CacheModule } from './infrastructure/cache/cache.module';
 import { GracefulShutdownModule } from './infrastructure/graceful-shutdown/graceful-shutdown.module';
 import { AuthModule } from './features/auth/auth.module';
 import { OAuthModule } from './features/oauth/oauth.module';
-import { TaskModule } from './features/task/task.module';
+import { RegionsModule } from './features/regions/regions.module';
 import { DictionaryModule } from './features/dictionary/dictionary.module';
 import { GraphqlApiModule } from './api/graphql-api/graphql-api.module';
 import { RestApiModule } from './api/rest-api/rest-api.module';
@@ -29,8 +29,8 @@ import { McpModule } from './api/mcp-api/mcp.module';
 
     AuthModule,
     OAuthModule,
-    TaskModule,
     DictionaryModule,
+    RegionsModule,
 
     GraphqlApiModule,
     RestApiModule,

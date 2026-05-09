@@ -57,8 +57,3 @@ export type OAuthRefreshToken = Prisma.OAuthRefreshTokenModel
  * 
  */
 export type RefreshToken = Prisma.RefreshTokenModel
-/**
- * Model Task
- * 
- */
-export type Task = Prisma.TaskModel
