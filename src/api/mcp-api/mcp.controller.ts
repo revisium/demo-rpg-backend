@@ -35,7 +35,7 @@ export class McpController {
       });
 
       const server = new McpServer({
-        name: 'template-nestjs-api',
+        name: 'demo-rpg-backend',
         version: '0.1.0',
       });
 

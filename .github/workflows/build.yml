@@ -1,37 +1,23 @@
 name: Build
 
 on:
+  workflow_dispatch:
   push:
-    # branches: [master]  # TODO: uncomment after configuring Docker Hub secrets (see docs/after-fork.md)
-    tags: ['v*']
+    branches: [master]
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
 
 jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051
-        with:
-          images: your-registry/your-project
-          tags: |
-            type=ref,event=branch
-            type=ref,event=tag
-            type=sha
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push
-        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8
-        with:
-          context: .
-          file: docker/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+  build-and-push-image:
+    uses: revisium/revisium-actions/.github/workflows/docker-build.yml@184b609dcbc1e23f14021141f29226d4e6a0f1ac # v0.3.6
+    with:
+      image_name: ${{ github.event.repository.name }}
+      context: .
+      dockerfile: docker/Dockerfile
+      emit_latest_tag: true
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}

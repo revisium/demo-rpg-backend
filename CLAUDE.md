@@ -1,10 +1,8 @@
 # CLAUDE.md
 
-## Template Setup (delete this section after scaffolding)
+`demo-rpg-backend` is the NestJS subgraph for the **Branching Tales** demo. Apollo Router federates this service with `revisium/demo-rpg-data` and `revisium/demo-rpg-cms` (both on `cloud.revisium.io`); the supergraph is composed by `revisium/supergraph-builder`.
 
-Follow **[docs/after-fork.md](docs/after-fork.md)** for the full checklist: rename, replace example domain, integrations (Docker Hub, SonarCloud), cleanup.
-
-After completing all steps, delete `docs/after-fork.md` and this section.
+The codebase is forked from [`revisium/template-nestjs-api`](https://github.com/revisium/template-nestjs-api); upstream patterns and conventions still apply unless noted in [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs).
 
 ## Project Architecture
 
