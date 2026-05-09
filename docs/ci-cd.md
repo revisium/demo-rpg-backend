@@ -9,7 +9,7 @@ Triggers: push to `master` / `release/**`, PRs to `master` / `release/**`
 Steps:
 1. Checkout (full history for SonarQube)
 2. Setup Node 24.11.1
-3. `npm ci --ignore-scripts --prefer-offline --no-audit --no-fund`
+3. `npm ci --ignore-scripts --prefer-offline --no-audit --no-fund` followed by `npm rebuild bcrypt @swc/core @prisma/engines prisma` (postinstall scripts run only for these vetted native deps)
 4. `npm run lint:ci` — ESLint with zero warnings
 5. `npm run tsc` — TypeScript type check
 6. Start test database (Docker Compose with health check wait)

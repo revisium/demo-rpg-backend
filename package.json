@@ -1,11 +1,11 @@
 {
   "name": "demo-rpg-backend",
   "version": "0.1.0",
-  "description": "NestJS subgraph for the Branching Tales demo — wraps revisium/demo-rpg-data and adds business logic. CQRS, GraphQL (Yoga Federation v2), REST (Swagger), MCP, OAuth, Prisma, CASL.",
+  "description": "NestJS subgraph for the Branching Tales demo — wraps the Revisium demo subgraphs (revisium/demo-rpg-data, revisium/demo-rpg-cms) and adds business logic. CQRS, GraphQL (Yoga Federation v2), REST (Swagger), MCP, OAuth, Prisma, CASL.",
   "private": true,
   "license": "MIT",
   "scripts": {
-    "prisma:generate": "dotenv -e .env.example -e .env -- prisma generate && npm run prisma:postgenerate",
+    "prisma:generate": "dotenv -e .env -e .env.example -- prisma generate && npm run prisma:postgenerate",
     "prisma:postgenerate": "echo \"export * from './client';\" > src/__generated__/client/index.ts",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
@@ -26,8 +26,8 @@
     "test": "NODE_ENV=test jest --maxWorkers=50% --forceExit",
     "test:watch": "NODE_ENV=test jest --watch",
     "test:cov": "NODE_ENV=test jest --maxWorkers=50% --forceExit --coverage --silent",
-    "docker:test-container-up": "docker compose -f docker/docker-compose-test.yml -p template-test up -d && sleep 1 && dotenv -e .env.test npm run prisma:migrate:deploy && dotenv -e .env.test npm run seed",
-    "docker:test-container-down": "docker compose -f docker/docker-compose-test.yml -p template-test down --volumes",
+    "docker:test-container-up": "docker compose -f docker/docker-compose-test.yml -p demo-rpg-backend-test up -d && sleep 1 && dotenv -e .env.test npm run prisma:migrate:deploy && dotenv -e .env.test npm run seed",
+    "docker:test-container-down": "docker compose -f docker/docker-compose-test.yml -p demo-rpg-backend-test down --volumes",
     "version:minor": "npm version minor --no-git-tag-version",
     "version:patch": "npm version patch --no-git-tag-version"
   },

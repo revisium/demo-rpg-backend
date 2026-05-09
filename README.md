@@ -6,7 +6,7 @@ Forked from [`revisium/template-nestjs-api`](https://github.com/revisium/templat
 
 ## Role in the demo
 
-```
+```text
         ┌─────────────────────────┐
         │   Apollo Router         │
         │   (federated supergraph)│

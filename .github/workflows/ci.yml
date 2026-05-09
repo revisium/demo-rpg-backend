@@ -42,7 +42,7 @@ jobs:
       - run: npm run tsc
 
       - name: Start test database
-        run: docker compose -f docker/docker-compose-test.yml -p template-test up -d --wait
+        run: docker compose -f docker/docker-compose-test.yml -p demo-rpg-backend-test up -d --wait
 
       - name: Run migrations
         run: ./node_modules/.bin/dotenv -e .env.test -- ./node_modules/.bin/prisma migrate deploy
@@ -55,7 +55,7 @@ jobs:
 
       - name: Stop test database
         if: always()
-        run: docker compose -f docker/docker-compose-test.yml -p template-test down --volumes
+        run: docker compose -f docker/docker-compose-test.yml -p demo-rpg-backend-test down --volumes
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@299e4b793aaa83bf2aba7c9c14bedbb485688ec4 # v7.1.0
