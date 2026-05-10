@@ -69,13 +69,13 @@
 
 The dictionary uses an `@hey-api/openapi-ts`-generated REST client against this base URL — no SDK login or revision pinning needed. Schema migrations live in `revisium/migrations.json`; the OpenAPI spec used for codegen lives in `revisium/openapi.json`.
 
-### Bootstrap-only env (only used by `npm run revisium:bootstrap`)
+### K8s migrations-Job
 
 | Variable | Default | Description |
 |---|---|---|
-| `REVISIUM_STANDALONE_URL` | `http://localhost:8888` | Where the local `@revisium/standalone` is running |
-| `REVISIUM_USERNAME` | `admin` | Username for the bootstrap script's login |
-| `REVISIUM_PASSWORD` | `admin` | Password for the bootstrap script's login |
+| `REVISIUM_API_KEY` | — | API key for the cluster Revisium pod, read automatically by `revisium-cli`. Set from the `RPG_REVISIUM_API_KEY` Secret in `demo-dev` namespace. Not used at runtime. |
+
+Local dev runs against `@revisium/standalone` with no auth; targets are resolved from `.revisium/revisium-cli.config.json` so no env vars are needed.
 
 ## Deprecated
 
