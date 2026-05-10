@@ -65,11 +65,17 @@
 
 | Variable | Default | Description |
 |---|---|---|
-| `REVISIUM_API_URL` | — | Revisium REST API base URL (e.g. `https://cloud.revisium.io`). Empty → `regions` queries return empty. |
-| `REVISIUM_USERNAME` | `admin` | Revisium login username |
-| `REVISIUM_PASSWORD` | `admin` | Revisium login password |
+| `REVISIUM_DEMO_RPG_DATA_URL` | — | REST endpoint base URL for the demo-rpg-data project. Local: `http://localhost:8888/endpoint/rest/admin/demo-rpg-data/master/head`. Cluster: `http://dev-demo-revisium-application.demo-dev.svc.cluster.local:80/endpoint/rest/admin/demo-rpg-data/master/head`. Empty → dictionary calls return null and `regions` queries serve empty results. |
 
-`@revisium/client` resolves the head revision of `revisium/demo-rpg-data` automatically — no revision ID env var needed.
+The dictionary uses an `@hey-api/openapi-ts`-generated REST client against this base URL — no SDK login or revision pinning needed. Schema migrations live in `revisium/migrations.json`; the OpenAPI spec used for codegen lives in `revisium/openapi.json`.
+
+### Bootstrap-only env (only used by `npm run revisium:bootstrap`)
+
+| Variable | Default | Description |
+|---|---|---|
+| `REVISIUM_STANDALONE_URL` | `http://localhost:8888` | Where the local `@revisium/standalone` is running |
+| `REVISIUM_USERNAME` | `admin` | Username for the bootstrap script's login |
+| `REVISIUM_PASSWORD` | `admin` | Password for the bootstrap script's login |
 
 ## Deprecated
 

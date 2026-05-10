@@ -1,171 +1,168 @@
 import { mock } from 'jest-mock-extended';
 import { ConfigService } from '@nestjs/config';
-import type { RevisionScope, RowModel, RowsConnection } from '@revisium/client';
-import { RevisiumClient } from '@revisium/client';
 import { DictionaryApiService } from '../dictionary-api.service';
+import * as sdk from 'src/__generated__/demo-rpg-data';
+import { client } from 'src/__generated__/demo-rpg-data/client.gen';
 
-jest.mock('@revisium/client');
+jest.mock('src/__generated__/demo-rpg-data', () => ({
+  __esModule: true,
+  listRegions: jest.fn(),
+  getRegions: jest.fn(),
+}));
+jest.mock('src/__generated__/demo-rpg-data/client.gen', () => ({
+  __esModule: true,
+  client: { setConfig: jest.fn() },
+}));
 
-const MockedClient = RevisiumClient as jest.MockedClass<typeof RevisiumClient>;
+const mockedSdk = sdk as jest.Mocked<typeof sdk>;
+const mockedClient = client as unknown as { setConfig: jest.Mock };
 
-function buildRow(id: string): RowModel {
-  return {
-    createdId: id,
-    id,
-    versionId: `v-${id}`,
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-01-01T00:00:00Z',
-    publishedAt: null,
-    readonly: false,
-    data: { climate: 'temperate' },
-  };
-}
+const buildConfig = (baseUrl: string | undefined) => {
+  const config = mock<ConfigService>();
+  config.get.mockImplementation((key: string) =>
+    key === 'REVISIUM_DEMO_RPG_DATA_URL' ? baseUrl : undefined,
+  );
+  return config;
+};
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
 describe('DictionaryApiService', () => {
-  beforeEach(() => {
-    MockedClient.mockClear();
-  });
-
-  const buildConfig = (
-    apiUrl: string | undefined,
-    creds: { username?: string; password?: string } = { username: 'u', password: 'p' },
-  ) => {
-    const config = mock<ConfigService>();
-    config.get.mockImplementation((key: string) => {
-      if (key === 'REVISIUM_API_URL') return apiUrl;
-      if (key === 'REVISIUM_USERNAME') return creds.username;
-      if (key === 'REVISIUM_PASSWORD') return creds.password;
-      return undefined;
-    });
-    return config;
-  };
-
-  it('skips client init when REVISIUM_API_URL is missing', async () => {
+  it('disables itself when REVISIUM_DEMO_RPG_DATA_URL is missing', async () => {
     const service = new DictionaryApiService(buildConfig(undefined));
-    await service.onModuleInit();
+    service.onModuleInit();
 
-    expect(MockedClient).not.toHaveBeenCalled();
-    expect(await service.getRegions({})).toBeNull();
+    expect(mockedClient.setConfig).not.toHaveBeenCalled();
+    expect(await service.listRegions({})).toBeNull();
     expect(await service.getRegion('any')).toBeNull();
+    expect(mockedSdk.listRegions).not.toHaveBeenCalled();
   });
 
-  it('skips client init when credentials are missing', async () => {
-    const service = new DictionaryApiService(buildConfig('https://example.test', {}));
-    await service.onModuleInit();
-
-    expect(MockedClient).not.toHaveBeenCalled();
-    expect(await service.getRegions({})).toBeNull();
-  });
-
-  it('logs in then resolves the head scope on first request', async () => {
-    const scope = mock<RevisionScope>();
-    const connection: RowsConnection = {
-      edges: [{ cursor: 'c0', node: buildRow('verdant') }],
-      totalCount: 1,
-      pageInfo: { endCursor: 'c0', hasNextPage: false, hasPreviousPage: false },
-    };
-    scope.getRows.mockResolvedValue(connection);
-
-    const login = jest.fn().mockResolvedValue(undefined);
-    const revision = jest.fn().mockResolvedValue(scope);
-    MockedClient.mockImplementation(() => ({ login, revision }) as unknown as RevisiumClient);
-
+  it('configures the generated client with the configured base URL', () => {
     const service = new DictionaryApiService(
-      buildConfig('https://example.test', { username: 'alice', password: 's3cret' }),
+      buildConfig('https://example.test/endpoint/rest/revisium/demo-rpg-data/master/head'),
     );
-    await service.onModuleInit();
+    service.onModuleInit();
 
-    expect(login).toHaveBeenCalledWith('alice', 's3cret');
-
-    const result = await service.getRegions({ first: 25, after: 'c-prev' });
-
-    expect(revision).toHaveBeenCalledWith({
-      org: 'revisium',
-      project: 'demo-rpg-data',
-      branch: 'master',
-      revision: 'head',
+    expect(mockedClient.setConfig).toHaveBeenCalledWith({
+      baseUrl: 'https://example.test/endpoint/rest/revisium/demo-rpg-data/master/head',
     });
-    expect(scope.getRows).toHaveBeenCalledWith('regions', { first: 25, after: 'c-prev' });
-    expect(result).toBe(connection);
   });
 
-  it('caches the head scope across calls', async () => {
-    const scope = mock<RevisionScope>();
-    scope.getRows.mockResolvedValue({
-      edges: [],
-      totalCount: 0,
-      pageInfo: { hasNextPage: false, hasPreviousPage: false },
-    });
-
-    const revision = jest.fn().mockResolvedValue(scope);
-    MockedClient.mockImplementation(
-      () =>
-        ({ login: jest.fn().mockResolvedValue(undefined), revision }) as unknown as RevisiumClient,
-    );
+  it('listRegions delegates to generated SDK with default page size', async () => {
+    mockedSdk.listRegions.mockResolvedValue({
+      data: {
+        edges: [],
+        totalCount: 0,
+        pageInfo: {
+          startCursor: null,
+          endCursor: null,
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+      },
+      error: undefined,
+    } as Awaited<ReturnType<typeof sdk.listRegions>>);
 
     const service = new DictionaryApiService(buildConfig('https://example.test'));
-    await service.onModuleInit();
+    service.onModuleInit();
+    await service.listRegions({});
 
-    await service.getRegions({});
-    await service.getRegions({ first: 10 });
-
-    expect(revision).toHaveBeenCalledTimes(1);
+    expect(mockedSdk.listRegions).toHaveBeenCalledWith({ body: { first: 100, after: undefined } });
   });
 
-  it('disables itself when login fails', async () => {
-    const login = jest.fn().mockRejectedValue(new Error('401 unauthorized'));
-    const revision = jest.fn();
-    MockedClient.mockImplementation(() => ({ login, revision }) as unknown as RevisiumClient);
+  it('listRegions forwards explicit pagination', async () => {
+    mockedSdk.listRegions.mockResolvedValue({
+      data: {
+        edges: [],
+        totalCount: 0,
+        pageInfo: {
+          startCursor: null,
+          endCursor: null,
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+      },
+      error: undefined,
+    } as Awaited<ReturnType<typeof sdk.listRegions>>);
 
     const service = new DictionaryApiService(buildConfig('https://example.test'));
-    await service.onModuleInit();
+    service.onModuleInit();
+    await service.listRegions({ first: 25, after: 'c-prev' });
 
-    expect(await service.getRegions({})).toBeNull();
-    expect(revision).not.toHaveBeenCalled();
+    expect(mockedSdk.listRegions).toHaveBeenCalledWith({ body: { first: 25, after: 'c-prev' } });
   });
 
-  it('recovers after a transient revision-resolve failure', async () => {
-    const scope = mock<RevisionScope>();
-    scope.getRows.mockResolvedValue({
-      edges: [],
-      totalCount: 0,
-      pageInfo: { hasNextPage: false, hasPreviousPage: false },
-    });
-
-    const revision = jest
-      .fn()
-      .mockRejectedValueOnce(new Error('transient'))
-      .mockResolvedValueOnce(scope);
-    MockedClient.mockImplementation(
-      () =>
-        ({ login: jest.fn().mockResolvedValue(undefined), revision }) as unknown as RevisiumClient,
-    );
+  it('listRegions returns null and logs when SDK returns an error', async () => {
+    mockedSdk.listRegions.mockResolvedValue({
+      data: undefined,
+      error: { statusCode: 500, message: 'boom' },
+    } as Awaited<ReturnType<typeof sdk.listRegions>>);
 
     const service = new DictionaryApiService(buildConfig('https://example.test'));
-    await service.onModuleInit();
-
-    expect(await service.getRegions({})).toBeNull();
-    expect(await service.getRegions({})).not.toBeNull();
-    expect(revision).toHaveBeenCalledTimes(2);
+    service.onModuleInit();
+    expect(await service.listRegions({})).toBeNull();
   });
 
-  it('returns null on getRegion when client throws (e.g. 404)', async () => {
-    const scope = mock<RevisionScope>();
-    scope.getRow.mockRejectedValue(new Error('Row not found'));
-
-    MockedClient.mockImplementation(
-      () =>
-        ({
-          login: jest.fn().mockResolvedValue(undefined),
-          revision: jest.fn().mockResolvedValue(scope),
-        }) as unknown as RevisiumClient,
-    );
+  it('getRegion returns the row payload when SDK succeeds', async () => {
+    mockedSdk.getRegions.mockResolvedValue({
+      data: {
+        id: 'verdant-marches',
+        versionId: 'v',
+        createdId: 'verdant-marches',
+        createdAt: '2026-01-01T00:00:00Z',
+        updatedAt: '2026-01-01T00:00:00Z',
+        publishedAt: '',
+        readonly: false,
+        data: {
+          name: { en: 'Verdant', ru: 'V', zh: 'V' },
+          description: { en: 'd', ru: 'd', zh: 'd' },
+          climate: 'temperate',
+        },
+      },
+      error: undefined,
+    } as Awaited<ReturnType<typeof sdk.getRegions>>);
 
     const service = new DictionaryApiService(buildConfig('https://example.test'));
-    await service.onModuleInit();
+    service.onModuleInit();
+    const result = await service.getRegion('verdant-marches');
 
-    const result = await service.getRegion('missing');
-    expect(result).toBeNull();
-    expect(scope.getRow).toHaveBeenCalledWith('regions', 'missing');
+    expect(mockedSdk.getRegions).toHaveBeenCalledWith({ path: { rowId: 'verdant-marches' } });
+    expect(result?.id).toBe('verdant-marches');
+    expect(result?.data.climate).toBe('temperate');
+  });
+
+  it('getRegion returns null on 404', async () => {
+    mockedSdk.getRegions.mockResolvedValue({
+      data: undefined,
+      error: { statusCode: 404, message: 'not found' },
+    } as Awaited<ReturnType<typeof sdk.getRegions>>);
+
+    const service = new DictionaryApiService(buildConfig('https://example.test'));
+    service.onModuleInit();
+    expect(await service.getRegion('missing')).toBeNull();
+  });
+
+  it('getRegion returns null on non-404 errors and logs', async () => {
+    mockedSdk.getRegions.mockResolvedValue({
+      data: undefined,
+      error: { statusCode: 500, message: 'boom' },
+    } as Awaited<ReturnType<typeof sdk.getRegions>>);
+
+    const service = new DictionaryApiService(buildConfig('https://example.test'));
+    service.onModuleInit();
+    expect(await service.getRegion('x')).toBeNull();
+  });
+
+  it('returns null without calling SDK when disabled', async () => {
+    const service = new DictionaryApiService(buildConfig(undefined));
+    service.onModuleInit();
+
+    expect(await service.listRegions({})).toBeNull();
+    expect(await service.getRegion('x')).toBeNull();
+    expect(mockedSdk.listRegions).not.toHaveBeenCalled();
+    expect(mockedSdk.getRegions).not.toHaveBeenCalled();
   });
 });

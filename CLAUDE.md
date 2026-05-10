@@ -34,10 +34,15 @@ All three layers call the same `*ApiService` facade. Business logic lives **only
 
 ### Dictionary Service (Revisium integration)
 
-- `src/features/dictionary/` — wraps `@revisium/client`. **Do not** reimplement HTTP calls, URL building, or revision pinning by hand — let the SDK do it (`client.revision({ ..., revision: 'head' })` auto-resolves the head revision)
-- `revisium/migrations.json` — schema migrations (committed to git)
+- `src/features/dictionary/` — wraps the `@hey-api/openapi-ts`-generated REST client. **Do not** reimplement HTTP calls, URL building, or auth by hand — call generated SDK functions (`listRegions`, `getRegions`, etc.) and let them target the base URL set on the generated `client`
+- `revisium/migrations.json` — schema migrations for `demo-rpg-data` (committed to git)
+- `revisium/openapi.json` — OpenAPI spec used for codegen (committed to git)
+- `src/__generated__/demo-rpg-data/` — generated client (committed to git, regenerated via codegen)
 - `npm run revisium:standalone` — start local Revisium (port 8888, embedded PG on 5441)
+- `npm run revisium:bootstrap` — apply migrations + create REST endpoint + save OpenAPI spec + run codegen (requires standalone running)
 - `npm run revisium:save-migrations` / `revisium:apply-migrations` — manage schema
+- `npm run codegen:demo-rpg-data` — regenerate the typed client from `revisium/openapi.json`
+- After changing the demo-rpg-data schema (locally via Admin UI): run `revisium:save-migrations` then commit both `migrations.json` and the regenerated `openapi.json` + `src/__generated__/demo-rpg-data/`
 
 ### Cache + Events
 
