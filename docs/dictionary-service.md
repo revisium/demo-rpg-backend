@@ -80,9 +80,25 @@ npm run revisium:standalone     # fresh DB, fresh admin
 npm run revisium:bootstrap      # re-apply everything
 ```
 
+### What `revisium:bootstrap` actually does
+
+`scripts/revisium-bootstrap.ts` is thin orchestration around the `revisium` CLI (alpha). It runs:
+
+```bash
+revisium project ensure  --url revisium://admin@<host>/admin/demo-rpg-data/master
+revisium migrate apply   --file ./revisium/migrations.json --commit \
+                         --url revisium://admin@<host>/admin/demo-rpg-data/master:draft
+revisium endpoint ensure --type REST_API \
+                         --url revisium://admin@<host>/admin/demo-rpg-data/master:head
+```
+
+…then fetches `/endpoint/openapi/admin/demo-rpg-data/master/head/openapi.json`, writes it to `revisium/openapi.json`, and runs `npx @hey-api/openapi-ts`. The TS wrapper only handles the password→JWT exchange (no `revisium auth login` for password-mode standalones yet) and the spec fetch + codegen call. Everything else is the CLI.
+
+The `--url` argument format is documented at <https://github.com/revisium/revisium-cli/blob/master/docs/url-format.md>.
+
 ### Manual `revisium` CLI
 
-`revisium-bootstrap.ts` orchestrates everything, but the underlying CLI is also exposed:
+The same primitives are also exposed directly:
 
 ```bash
 # save current schema to migrations.json
@@ -91,8 +107,6 @@ npm run revisium:save-migrations
 # apply migrations.json (interactive token prompt unless you pass ?token=… in the URL)
 npm run revisium:apply-migrations
 ```
-
-The `--url` argument format is documented at <https://github.com/revisium/revisium-cli/blob/master/docs/url-format.md>.
 
 ## Production / K8s
 
