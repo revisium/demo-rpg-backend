@@ -38,7 +38,8 @@ async function login(): Promise<string> {
 
 function applyMigrations(token: string) {
   console.log('→ Applying migrations from revisium/migrations.json…');
-  const url = `revisium://${ADMIN_USERNAME}@${STANDALONE_URL.replace(/^https?:\/\//, '')}/${ORG}/${PROJECT}/${BRANCH}/draft?token=${token}`;
+  const { host } = new URL(STANDALONE_URL);
+  const url = `revisium://${ADMIN_USERNAME}@${host}/${ORG}/${PROJECT}/${BRANCH}/draft?token=${token}`;
   const result = spawnSync(
     'npx',
     [
