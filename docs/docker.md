@@ -40,4 +40,4 @@ docker run -p 8080:8080 \
 - **redis**: Redis 7 (port 6380)
 
 ### Test (`docker-compose-test.yml`)
-- **db**: PostgreSQL 17 (port 5434, separate database)
+- **db**: PostgreSQL 17 (port 5437, separate database)

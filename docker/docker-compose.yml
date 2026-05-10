@@ -4,13 +4,13 @@ services:
     ports:
       - '5433:5432'
     environment:
-      POSTGRES_DB: template-dev
-      POSTGRES_USER: template
+      POSTGRES_DB: demo_rpg_backend_dev
+      POSTGRES_USER: demo_rpg
       POSTGRES_PASSWORD: password
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U template -d template-dev']
+      test: ['CMD-SHELL', 'pg_isready -U demo_rpg -d demo_rpg_backend_dev']
       interval: 5s
       timeout: 5s
       retries: 5

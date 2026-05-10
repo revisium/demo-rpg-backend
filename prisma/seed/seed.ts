@@ -20,12 +20,7 @@ const ROLES: Record<string, RoleConfig> = {
     id: 'user',
     name: 'User',
     level: 1,
-    permissions: [
-      { action: 'read', subject: 'Task' },
-      { action: 'create', subject: 'Task' },
-      { action: 'update', subject: 'Task', condition: { userId: '${userId}' } },
-      { action: 'delete', subject: 'Task', condition: { userId: '${userId}' } },
-    ],
+    permissions: [{ action: 'read', subject: 'Region' }],
   },
 };
 
@@ -37,20 +32,24 @@ async function main() {
     await prisma.$connect();
 
     for (const roleData of Object.values(ROLES)) {
+      const permissionsCreate = roleData.permissions.map((p) => ({
+        action: p.action,
+        subject: p.subject,
+        condition: p.condition ? structuredClone(p.condition) : undefined,
+      }));
+
       await prisma.role.upsert({
         where: { id: roleData.id },
-        update: {},
+        update: {
+          name: roleData.name,
+          level: roleData.level,
+          permissions: { deleteMany: {}, create: permissionsCreate },
+        },
         create: {
           id: roleData.id,
           name: roleData.name,
           level: roleData.level,
-          permissions: {
-            create: roleData.permissions.map((p) => ({
-              action: p.action,
-              subject: p.subject,
-              condition: p.condition ? structuredClone(p.condition) : undefined,
-            })),
-          },
+          permissions: { create: permissionsCreate },
         },
       });
     }

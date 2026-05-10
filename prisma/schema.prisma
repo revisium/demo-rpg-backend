@@ -25,8 +25,6 @@ model User {
   oauthAccessTokens       OAuthAccessToken[]
   oauthRefreshTokens      OAuthRefreshToken[]
 
-  tasks Task[]
-
   tokenVersion  Int            @default(0)
   refreshTokens RefreshToken[]
 
@@ -150,26 +148,3 @@ model RefreshToken {
   @@index([expiresAt])
 }
 
-// ─── Example Domain: Task ───────────────────────────────────
-
-model Task {
-  id        String   @id @default(nanoid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  title       String   @db.VarChar(255)
-  description String?  @db.Text
-  status      TaskStatus @default(PENDING)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  @@index([userId])
-  @@index([status])
-}
-
-enum TaskStatus {
-  PENDING
-  IN_PROGRESS
-  COMPLETED
-}

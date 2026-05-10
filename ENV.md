@@ -69,6 +69,8 @@
 | `REVISIUM_API_URL` | — | Revisium REST API base URL |
 | `REVISIUM_USERNAME` | `admin` | Revisium login username |
 | `REVISIUM_PASSWORD` | `admin` | Revisium login password |
+| `REVISIUM_DEMO_RPG_DATA_REVISION_ID` | — | Revision ID for `revisium/demo-rpg-data`. Empty → `regions` queries return empty. Local: paste from `npm run revisium:standalone` head revision. Cloud: `get_branch("revisium", "demo-rpg-data", "master").headRevisionId` |
+| `REVISIUM_HTTP_TIMEOUT_MS` | `5000` | Per-request timeout for Revisium fetch calls (ms). Non-finite or non-positive values fall back to the default. |
 
 ## Deprecated
 
