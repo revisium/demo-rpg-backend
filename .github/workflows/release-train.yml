@@ -50,7 +50,7 @@ jobs:
       validate_command: |
         cleanup() {
           status=$?
-          docker compose -f docker/docker-compose-test.yml -p template-test down --volumes >/dev/null 2>&1 || true
+          docker compose -f docker/docker-compose-test.yml -p demo-rpg-test down --volumes >/dev/null 2>&1 || true
           exit "$status"
         }
         trap cleanup EXIT
@@ -58,7 +58,7 @@ jobs:
         cp .env.example .env
         npm run lint:ci
         npm run tsc
-        docker compose -f docker/docker-compose-test.yml -p template-test up -d --wait
+        docker compose -f docker/docker-compose-test.yml -p demo-rpg-test up -d --wait
         ./node_modules/.bin/dotenv -e .env.test -- ./node_modules/.bin/prisma migrate deploy
         ./node_modules/.bin/dotenv -e .env.test -- npm run seed
         ./node_modules/.bin/dotenv -e .env.test -- npm run test:cov

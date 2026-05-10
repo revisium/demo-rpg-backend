@@ -13,6 +13,8 @@ export class GetRegionHandler implements IQueryHandler<GetRegionQuery> {
   async execute(query: GetRegionQuery): Promise<GetRegionQueryReturnType> {
     const result = await this.dictionary.getRegion(query.data.regionId);
 
+    if (result === null) return null;
+
     if (!isRegionRow(result)) {
       this.logger.warn(`Dictionary returned an unexpected shape for region ${query.data.regionId}`);
       return null;

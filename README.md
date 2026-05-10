@@ -2,7 +2,7 @@
 
 NestJS subgraph for **Branching Tales** — an Apollo Router topology federating this service with two Revisium-managed subgraphs (`revisium/demo-rpg-data`, `revisium/demo-rpg-cms`).
 
-Forked from [`revisium/template-nestjs-api`](https://github.com/revisium/template-nestjs-api). The README + spec live in [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs); this repo is the running NestJS application that wraps and extends the Revisium-hosted game data.
+The project passport, ADRs, and shared spec live in [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs); this repo is the running NestJS application that wraps and extends the Revisium-hosted game data.
 
 ## Role in the demo
 
@@ -83,30 +83,14 @@ See [`docs/getting-started.md`](docs/getting-started.md) for detailed setup.
 
 | Doc | Description |
 |---|---|
-| [Getting Started](docs/getting-started.md) | Prerequisites, setup, first request |
-| [Architecture](docs/architecture.md) | Layers, data flow, module organization |
-| [CQRS](docs/cqrs.md) | Commands, queries, events, API service facade |
-| [GraphQL](docs/graphql.md) | Yoga Federation setup, resolvers, models, inputs |
-| [REST API](docs/rest-api.md) | Swagger, controllers, DTOs, validation |
-| [MCP](docs/mcp.md) | MCP tools, Zod schemas, auth flow |
-| [OAuth](docs/oauth.md) | PKCE flow, token types, security |
-| [Auth & Permissions](docs/auth-and-permissions.md) | JWT, CASL, guards, roles |
-| [JWT Lifecycle](docs/jwt-lifecycle.md) | Token rotation, cookies, refresh, revocation |
-| [Prisma](docs/prisma.md) | Schema, migrations, seed, transactions |
-| [Caching](docs/caching.md) | BentoCache, invalidation, stable keys |
-| [Logging & Tracing](docs/logging-and-tracing.md) | Pino, trace IDs, structured logs |
-| [Metrics](docs/metrics.md) | Prometheus, custom metrics |
-| [Health Checks](docs/health-checks.md) | Terminus, K8s probes |
-| [Testing](docs/testing.md) | Jest, SWC, mocking, coverage |
-| [Docker](docs/docker.md) | Dev compose, production build |
-| [CI/CD](docs/ci-cd.md) | GitHub Actions workflows |
-| [SonarQube](docs/sonarqube.md) | SonarCloud setup, quality gates |
+| [Getting Started](docs/getting-started.md) | Prerequisites, local setup, first request |
+| [Dictionary Service](docs/dictionary-service.md) | Revisium proxy + migrations |
+| [Adding MCP Tools](docs/adding-mcp-tools.md) | Registering MCP tools |
+| [Deployment](docs/deployment.md) | Production deploy notes |
 | [Environment Variables](ENV.md) | Complete env var reference |
-| [Adding a New Domain](docs/adding-new-domain.md) | Step-by-step guide |
-| [Dictionary Service](docs/dictionary-service.md) | Revisium integration, migrations |
-| [Adding MCP Tools](docs/adding-mcp-tools.md) | Tool creation guide |
-| [Deployment](docs/deployment.md) | K8s manifests, production checklist |
 | [Code Review](REVIEW.md) | Architecture, SOLID, testing, authorization checklist |
+
+Broader project context (passport, ADRs, schemas) lives in [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs).
 
 ## Tech Stack
 
@@ -128,7 +112,6 @@ See [`docs/getting-started.md`](docs/getting-started.md) for detailed setup.
 ## Related repos
 
 - [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs) — project passport, ADRs, schemas, formulas, bootstrap source
-- [`revisium/template-nestjs-api`](https://github.com/revisium/template-nestjs-api) — upstream template; sync periodically
 - [`revisium/supergraph-builder`](https://github.com/revisium/supergraph-builder) — composes this subgraph + the two Revisium subgraphs into the Apollo Router supergraph
 
 ## License

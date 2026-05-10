@@ -5,6 +5,7 @@ import { DictionaryProxyService } from './dictionary-proxy.service';
 @Injectable()
 export class DictionaryApiService {
   private readonly logger = new Logger(DictionaryApiService.name);
+  private warnedMissingRevision = false;
 
   constructor(
     private readonly proxy: DictionaryProxyService,
@@ -34,9 +35,12 @@ export class DictionaryApiService {
   private dataRevisionId(): string | null {
     const rev = this.config.get<string>('REVISIUM_DEMO_RPG_DATA_REVISION_ID');
     if (!rev) {
-      this.logger.warn(
-        'REVISIUM_DEMO_RPG_DATA_REVISION_ID not configured; demo-rpg-data calls return empty.',
-      );
+      if (!this.warnedMissingRevision) {
+        this.logger.warn(
+          'REVISIUM_DEMO_RPG_DATA_REVISION_ID not configured; demo-rpg-data calls return empty.',
+        );
+        this.warnedMissingRevision = true;
+      }
       return null;
     }
     return rev;

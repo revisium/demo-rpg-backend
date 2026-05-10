@@ -41,13 +41,13 @@ export class ProjectTools implements McpToolRegistrar {
 @Injectable()
 export class McpServerService {
   constructor(
-    private readonly taskTools: TaskTools,
-    private readonly projectTools: ProjectTools,  // Add
+    private readonly regionsTools: RegionsTools,
+    private readonly projectTools: ProjectTools, // Add
   ) {}
 
   registerTools(server: McpServer, auth: McpAuthHelpers): void {
-    this.taskTools.register(server, auth);
-    this.projectTools.register(server, auth);  // Add
+    this.regionsTools.register(server, auth);
+    this.projectTools.register(server, auth); // Add
   }
 }
 ```

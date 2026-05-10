@@ -1,17 +1,15 @@
 # CLAUDE.md
 
-`demo-rpg-backend` is the NestJS subgraph for the **Branching Tales** demo. Apollo Router federates this service with `revisium/demo-rpg-data` and `revisium/demo-rpg-cms` (both on `cloud.revisium.io`); the supergraph is composed by `revisium/supergraph-builder`.
+`demo-rpg-backend` is the NestJS subgraph for the **Branching Tales** demo. Apollo Router federates this service with `revisium/demo-rpg-data` and `revisium/demo-rpg-cms` (both on `cloud.revisium.io`); the supergraph is composed by `revisium/supergraph-builder`. Conventions and broader context live in [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs).
 
-The codebase is forked from [`revisium/template-nestjs-api`](https://github.com/revisium/template-nestjs-api); upstream patterns and conventions still apply unless noted in [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs).
+## Project Documentation
 
-## Project Architecture
-
-See `docs/` for detailed documentation:
-- [docs/architecture.md](docs/architecture.md) — layers, data flow
-- [docs/cqrs.md](docs/cqrs.md) — commands, queries, events
-- [docs/adding-new-domain.md](docs/adding-new-domain.md) — step-by-step for new features
+- [docs/getting-started.md](docs/getting-started.md) — local setup, first request
+- [docs/dictionary-service.md](docs/dictionary-service.md) — Revisium proxy + migrations
 - [docs/adding-mcp-tools.md](docs/adding-mcp-tools.md) — adding MCP tools
-- [REVIEW.md](REVIEW.md) — code review checklist (architecture, SOLID, testing)
+- [docs/deployment.md](docs/deployment.md) — production deploy
+- [ENV.md](ENV.md) — environment variable reference
+- [REVIEW.md](REVIEW.md) — code review checklist
 
 ## Key Patterns
 
@@ -97,16 +95,14 @@ npm run docker:test-container-down # Stop test DB
 ### When modifying existing code:
 
 1. Read the relevant `docs/` file first
-2. Follow existing patterns exactly — consistency matters
+2. Follow existing patterns in the repo — consistency matters
 3. Run: `npm run tsc && npm run lint:ci` before finishing
-4. Update `docs/` if you changed a pattern or added new concepts
+4. Update the relevant doc if you changed a pattern documented there
 5. Follow [REVIEW.md](REVIEW.md) checklist before finishing
 
 ### Documentation maintenance:
 
-- `docs/` is the source of truth for HOW things work
 - Update docs alongside code changes — they are living documents
-- Each doc = reference + how-to, not abstract theory
 - `ENV.md` — keep in sync with `.env.example`. When adding a new env var, update both files
 - `sonar-project.properties` — keep organized by sections. When adding generated code or CQRS patterns, update exclusions/suppressions
 
