@@ -5,25 +5,35 @@ import { join } from 'node:path';
 
 const STANDALONE_URL = process.env.REVISIUM_STANDALONE_URL ?? 'http://localhost:8888';
 const ADMIN_USERNAME = process.env.REVISIUM_USERNAME ?? 'admin';
-const ADMIN_PASSWORD = process.env.REVISIUM_PASSWORD ?? 'admin';
+const ADMIN_PASSWORD =
+  process.env.REVISIUM_PASSWORD ?? process.env.ADMIN_PASSWORD ?? 'admin';
 const ORG = 'admin';
 const PROJECT = 'demo-rpg-data';
 const BRANCH = 'master';
 
-async function login(): Promise<string> {
-  const res = await fetch(`${STANDALONE_URL}/api/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ emailOrUsername: ADMIN_USERNAME, password: ADMIN_PASSWORD }),
-  });
+async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(url, init);
   if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(`${init?.method ?? 'GET'} ${url} → ${res.status}: ${body || res.statusText}`);
+  }
+  return res.json() as Promise<T>;
+}
+
+async function login(): Promise<string> {
+  try {
+    const body = await fetchJson<{ accessToken: string }>(`${STANDALONE_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ emailOrUsername: ADMIN_USERNAME, password: ADMIN_PASSWORD }),
+    });
+    return body.accessToken;
+  } catch (err) {
     throw new Error(
-      `Login failed: ${res.status}. Is standalone running at ${STANDALONE_URL}? ` +
-        `Start it with: npm run revisium:standalone`,
+      `Login failed at ${STANDALONE_URL}. Is standalone running? ` +
+        `Start it with: npm run revisium:standalone\n  cause: ${err instanceof Error ? err.message : err}`,
     );
   }
-  const body = (await res.json()) as { accessToken: string };
-  return body.accessToken;
 }
 
 function applyMigrations(token: string) {
@@ -49,44 +59,49 @@ function applyMigrations(token: string) {
   }
 }
 
-async function ensureRestEndpoint(token: string): Promise<void> {
+async function ensureRestEndpoint(token: string): Promise<boolean> {
   const headers = { Authorization: `Bearer ${token}` };
-  const draft = (await (
-    await fetch(
-      `${STANDALONE_URL}/api/organization/${ORG}/projects/${PROJECT}/branches/${BRANCH}/draft-revision`,
-      { headers },
-    )
-  ).json()) as { id: string };
+  const draft = await fetchJson<{ id: string }>(
+    `${STANDALONE_URL}/api/organization/${ORG}/projects/${PROJECT}/branches/${BRANCH}/draft-revision`,
+    { headers },
+  );
 
-  const existing = (await (
-    await fetch(`${STANDALONE_URL}/api/revision/${draft.id}/endpoints`, { headers })
-  ).json()) as Array<{ type: string; isDeleted: boolean }>;
-  const hasRest = existing.some((e) => e.type === 'REST_API' && !e.isDeleted);
-  if (hasRest) {
+  const existing = await fetchJson<Array<{ type: string; isDeleted: boolean }>>(
+    `${STANDALONE_URL}/api/revision/${draft.id}/endpoints`,
+    { headers },
+  );
+  if (existing.some((e) => e.type === 'REST_API' && !e.isDeleted)) {
     console.log('→ REST_API endpoint already exists.');
-    return;
+    return false;
   }
 
   console.log('→ Creating REST_API endpoint on draft…');
-  const res = await fetch(`${STANDALONE_URL}/api/revision/${draft.id}/endpoints`, {
+  await fetchJson(`${STANDALONE_URL}/api/revision/${draft.id}/endpoints`, {
     method: 'POST',
     headers: { ...headers, 'Content-Type': 'application/json' },
     body: JSON.stringify({ type: 'REST_API' }),
   });
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`Failed to create REST endpoint: ${res.status} ${body}`);
-  }
+  return true;
+}
+
+async function commitDraft(token: string, comment: string): Promise<void> {
+  console.log(`→ Publishing draft → head (${comment})…`);
+  await fetchJson(
+    `${STANDALONE_URL}/api/organization/${ORG}/projects/${PROJECT}/branches/${BRANCH}/create-revision`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ comment }),
+    },
+  );
 }
 
 async function saveOpenApiSpec(token: string): Promise<void> {
-  console.log('→ Fetching OpenAPI spec from standalone…');
-  const url = `${STANDALONE_URL}/endpoint/openapi/${ORG}/${PROJECT}/${BRANCH}/draft/openapi.json`;
-  const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-  if (!res.ok) {
-    throw new Error(`Failed to fetch OpenAPI spec from ${url}: ${res.status}`);
-  }
-  const spec = (await res.json()) as Record<string, unknown>;
+  console.log('→ Fetching OpenAPI spec from /master/head…');
+  const url = `${STANDALONE_URL}/endpoint/openapi/${ORG}/${PROJECT}/${BRANCH}/head/openapi.json`;
+  const spec = await fetchJson<Record<string, unknown>>(url, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   const path = join(process.cwd(), 'revisium', 'openapi.json');
   writeFileSync(path, JSON.stringify(spec, null, 2) + '\n');
   console.log(`✓ Saved OpenAPI spec → ${path}`);
@@ -104,7 +119,10 @@ async function main() {
   console.log(`# Revisium bootstrap (standalone at ${STANDALONE_URL})`);
   const token = await login();
   applyMigrations(token);
-  await ensureRestEndpoint(token);
+  const created = await ensureRestEndpoint(token);
+  if (created) {
+    await commitDraft(token, 'bootstrap: publish REST endpoint');
+  }
   await saveOpenApiSpec(token);
   runCodegen();
   console.log('✓ Bootstrap complete. Generated client in src/__generated__/demo-rpg-data');

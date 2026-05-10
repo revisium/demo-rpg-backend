@@ -4,7 +4,7 @@
 
 ## Architecture
 
-```
+```text
                                                      committed to git
                                                           │
                                             ┌─────────────┴───────────────┐

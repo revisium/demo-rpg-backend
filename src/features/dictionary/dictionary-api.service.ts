@@ -39,26 +39,38 @@ export class DictionaryApiService implements OnModuleInit {
 
   async listRegions(opts: { first?: number; after?: string }): Promise<ListRegionsResult | null> {
     if (!this.enabled) return null;
-    const { data, error } = await listRegions({
-      body: { first: opts.first ?? DEFAULT_PAGE_SIZE, after: opts.after },
-    });
-    if (error) {
-      this.logger.warn(`listRegions failed: ${JSON.stringify(error)}`);
+    try {
+      const { data, error } = await listRegions({
+        body: { first: opts.first ?? DEFAULT_PAGE_SIZE, after: opts.after },
+      });
+      if (error) {
+        this.logger.warn(`listRegions failed: ${JSON.stringify(error)}`);
+        return null;
+      }
+      return data ?? null;
+    } catch (err) {
+      this.logger.warn(`listRegions transport error: ${err instanceof Error ? err.message : err}`);
       return null;
     }
-    return data ?? null;
   }
 
   async getRegion(regionId: string): Promise<RegionRow | null> {
     if (!this.enabled) return null;
-    const { data, error } = await getRegions({ path: { rowId: regionId } });
-    if (error) {
-      if (isNotFound(error)) return null;
-      this.logger.warn(`getRegion failed for ${regionId}: ${JSON.stringify(error)}`);
+    try {
+      const { data, error } = await getRegions({ path: { rowId: regionId } });
+      if (error) {
+        if (isNotFound(error)) return null;
+        this.logger.warn(`getRegion failed for ${regionId}: ${JSON.stringify(error)}`);
+        return null;
+      }
+      if (!data) return null;
+      return { id: data.id, data: data.data };
+    } catch (err) {
+      this.logger.warn(
+        `getRegion transport error for ${regionId}: ${err instanceof Error ? err.message : err}`,
+      );
       return null;
     }
-    if (!data) return null;
-    return { id: data.id, data: data.data };
   }
 }
 

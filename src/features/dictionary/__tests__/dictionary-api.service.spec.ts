@@ -156,6 +156,22 @@ describe('DictionaryApiService', () => {
     expect(await service.getRegion('x')).toBeNull();
   });
 
+  it('listRegions returns null when SDK promise rejects (transport error)', async () => {
+    mockedSdk.listRegions.mockRejectedValue(new Error('ECONNREFUSED'));
+
+    const service = new DictionaryApiService(buildConfig('https://example.test'));
+    service.onModuleInit();
+    expect(await service.listRegions({})).toBeNull();
+  });
+
+  it('getRegion returns null when SDK promise rejects (transport error)', async () => {
+    mockedSdk.getRegions.mockRejectedValue(new Error('ENOTFOUND'));
+
+    const service = new DictionaryApiService(buildConfig('https://example.test'));
+    service.onModuleInit();
+    expect(await service.getRegion('verdant')).toBeNull();
+  });
+
   it('returns null without calling SDK when disabled', async () => {
     const service = new DictionaryApiService(buildConfig(undefined));
     service.onModuleInit();
