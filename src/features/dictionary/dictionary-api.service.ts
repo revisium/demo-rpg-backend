@@ -1,48 +1,74 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { DictionaryProxyService } from './dictionary-proxy.service';
+import {
+  RevisiumClient,
+  RevisionScope,
+  type RowModel,
+  type RowsConnection,
+} from '@revisium/client';
+
+const DATA_ORG = 'revisium';
+const DATA_PROJECT = 'demo-rpg-data';
+const DATA_BRANCH = 'master';
+const DEFAULT_PAGE_SIZE = 100;
 
 @Injectable()
-export class DictionaryApiService {
+export class DictionaryApiService implements OnModuleInit {
   private readonly logger = new Logger(DictionaryApiService.name);
-  private warnedMissingRevision = false;
+  private client: RevisiumClient | null = null;
+  private dataScope: Promise<RevisionScope> | null = null;
 
-  constructor(
-    private readonly proxy: DictionaryProxyService,
-    private readonly config: ConfigService,
-  ) {}
+  constructor(private readonly config: ConfigService) {}
 
-  async getRows(tableId: string, revisionId: string, opts: { first?: number; skip?: number } = {}) {
-    return this.proxy.getRows(tableId, revisionId, opts);
+  async onModuleInit() {
+    const baseUrl = this.config.get<string>('REVISIUM_API_URL');
+    if (!baseUrl) {
+      this.logger.warn('REVISIUM_API_URL not configured; dictionary calls return empty.');
+      return;
+    }
+    this.client = new RevisiumClient({ baseUrl });
+    try {
+      await this.client.login(
+        this.config.get<string>('REVISIUM_USERNAME') ?? 'admin',
+        this.config.get<string>('REVISIUM_PASSWORD') ?? 'admin',
+      );
+      this.logger.log('Revisium client authenticated');
+    } catch (err) {
+      this.logger.error('Revisium login failed', err instanceof Error ? err.message : err);
+      this.client = null;
+    }
   }
 
-  async getRow(tableId: string, rowId: string, revisionId: string) {
-    return this.proxy.getRow(tableId, rowId, revisionId);
+  async getRegions(opts: { first?: number; after?: string }): Promise<RowsConnection | null> {
+    const scope = await this.getDataScope();
+    if (!scope) return null;
+    return scope.getRows('regions', {
+      first: opts.first ?? DEFAULT_PAGE_SIZE,
+      after: opts.after,
+    });
   }
 
-  async getRegions(opts: { first?: number; skip?: number }) {
-    const revisionId = this.dataRevisionId();
-    if (!revisionId) return null;
-    return this.proxy.getRows('regions', revisionId, opts);
-  }
-
-  async getRegion(regionId: string) {
-    const revisionId = this.dataRevisionId();
-    if (!revisionId) return null;
-    return this.proxy.getRow('regions', regionId, revisionId);
-  }
-
-  private dataRevisionId(): string | null {
-    const rev = this.config.get<string>('REVISIUM_DEMO_RPG_DATA_REVISION_ID');
-    if (!rev) {
-      if (!this.warnedMissingRevision) {
-        this.logger.warn(
-          'REVISIUM_DEMO_RPG_DATA_REVISION_ID not configured; demo-rpg-data calls return empty.',
-        );
-        this.warnedMissingRevision = true;
-      }
+  async getRegion(regionId: string): Promise<RowModel | null> {
+    const scope = await this.getDataScope();
+    if (!scope) return null;
+    try {
+      return await scope.getRow('regions', regionId);
+    } catch (err) {
+      this.logger.warn(
+        `getRegion failed for ${regionId}: ${err instanceof Error ? err.message : err}`,
+      );
       return null;
     }
-    return rev;
+  }
+
+  private getDataScope(): Promise<RevisionScope> | null {
+    if (!this.client) return null;
+    this.dataScope ??= this.client.revision({
+      org: DATA_ORG,
+      project: DATA_PROJECT,
+      branch: DATA_BRANCH,
+      revision: 'head',
+    });
+    return this.dataScope;
   }
 }

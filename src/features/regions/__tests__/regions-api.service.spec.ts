@@ -10,11 +10,11 @@ describe('RegionsApiService', () => {
     queryBus.execute.mockResolvedValue({ edges: [], totalCount: 0 });
 
     const api = new RegionsApiService(queryBus);
-    await api.listRegions({ first: 5, skip: 2 });
+    await api.listRegions({ first: 5, after: 'cursor-2' });
 
     expect(queryBus.execute).toHaveBeenCalledWith(expect.any(ListRegionsQuery));
     const dispatched = queryBus.execute.mock.calls[0]![0] as ListRegionsQuery;
-    expect(dispatched.data).toEqual({ first: 5, skip: 2 });
+    expect(dispatched.data).toEqual({ first: 5, after: 'cursor-2' });
   });
 
   it('dispatches GetRegionQuery with regionId', async () => {

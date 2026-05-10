@@ -13,7 +13,10 @@ import { HttpAuthGuard } from 'src/features/auth/guards/http-auth.guard';
 import { HttpPermissionGuard } from 'src/features/auth/guards/http-permission.guard';
 import { PermissionParams } from 'src/features/auth/decorators/permission-params.decorator';
 import { PermissionAction, PermissionSubject } from 'src/features/auth/types';
-import { RegionClimate } from 'src/features/regions/queries/impl/list-regions.query';
+import {
+  LocalizedString,
+  RegionClimate,
+} from 'src/features/regions/queries/impl/list-regions.query';
 import { ListRegionsDto } from './dto/list-regions.dto';
 import { RegionResponseModel, RegionsListResponseModel } from './models/region-response.model';
 
@@ -30,11 +33,18 @@ export class RegionsController {
   async list(@Query() data: ListRegionsDto): Promise<RegionsListResponseModel> {
     const result = await this.regionsApi.listRegions({
       first: data.first,
-      skip: data.skip,
+      after: data.after,
     });
     return {
-      edges: result.edges.map((edge) => toRegion(edge.node.id, edge.node.data)),
+      edges: result.edges.map((edge) => ({
+        cursor: edge.cursor,
+        node: toRegion(edge.node.id, edge.node.data),
+      })),
       totalCount: result.totalCount,
+      pageInfo: {
+        endCursor: result.pageInfo.endCursor,
+        hasNextPage: result.pageInfo.hasNextPage,
+      },
     };
   }
 
@@ -54,8 +64,8 @@ export class RegionsController {
 function toRegion(
   id: string,
   data: {
-    name: { en: string; ru: string; zh: string };
-    description: { en: string; ru: string; zh: string };
+    name: LocalizedString;
+    description: LocalizedString;
     climate: RegionClimate;
   },
 ): RegionResponseModel {

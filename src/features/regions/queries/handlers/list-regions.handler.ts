@@ -1,10 +1,14 @@
 import { Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import type { RowModel } from '@revisium/client';
 import { DictionaryApiService } from 'src/features/dictionary/dictionary-api.service';
 import {
   ListRegionsQuery,
   ListRegionsQueryReturnType,
+  LocalizedString,
   RegionRow,
+  REGION_CLIMATES,
+  RegionClimate,
 } from '../impl/list-regions.query';
 
 @QueryHandler(ListRegionsQuery)
@@ -16,33 +20,51 @@ export class ListRegionsHandler implements IQueryHandler<ListRegionsQuery> {
   async execute(query: ListRegionsQuery): Promise<ListRegionsQueryReturnType> {
     const result = await this.dictionary.getRegions(query.data);
 
-    if (!isRegionsListResult(result)) {
-      this.logger.warn('Dictionary returned an unexpected shape for regions');
-      return { edges: [], totalCount: 0 };
+    if (!result) {
+      return { edges: [], totalCount: 0, pageInfo: { hasNextPage: false } };
     }
 
-    const edges = result.edges.filter(isRegionEdge).map((edge) => ({ node: edge.node }));
+    const edges: { cursor: string; node: RegionRow }[] = [];
+    for (const edge of result.edges) {
+      const region = toRegionRow(edge.node);
+      if (region) {
+        edges.push({ cursor: edge.cursor, node: region });
+      } else {
+        this.logger.warn(`Skipping region row ${edge.node.id}: malformed data`);
+      }
+    }
+
     return {
       edges,
-      totalCount: isValidCount(result.totalCount) ? result.totalCount : edges.length,
+      totalCount: result.totalCount,
+      pageInfo: {
+        endCursor: result.pageInfo.endCursor,
+        hasNextPage: result.pageInfo.hasNextPage,
+      },
     };
   }
 }
 
-function isRegionsListResult(value: unknown): value is { edges: unknown[]; totalCount?: unknown } {
+export function toRegionRow(node: RowModel): RegionRow | null {
+  const data = node.data;
+  if (!isLocalized(data.name) || !isLocalized(data.description)) return null;
+  if (!isClimate(data.climate)) return null;
+  return {
+    id: node.id,
+    data: {
+      name: data.name,
+      description: data.description,
+      climate: data.climate,
+    },
+  };
+}
+
+function isLocalized(value: unknown): value is LocalizedString {
   if (!value || typeof value !== 'object') return false;
-  const v = value as { edges?: unknown };
-  return Array.isArray(v.edges);
+  const v = value as { en?: unknown; ru?: unknown; zh?: unknown };
+  return typeof v.en === 'string' && typeof v.ru === 'string' && typeof v.zh === 'string';
 }
 
-function isValidCount(value: unknown): value is number {
-  return typeof value === 'number' && Number.isFinite(value) && value >= 0;
-}
-
-function isRegionEdge(edge: unknown): edge is { node: RegionRow } {
-  if (!edge || typeof edge !== 'object') return false;
-  const node = (edge as { node?: unknown }).node;
-  if (!node || typeof node !== 'object') return false;
-  const n = node as { id?: unknown; data?: unknown };
-  return typeof n.id === 'string' && typeof n.data === 'object' && n.data !== null;
+function isClimate(value: unknown): value is RegionClimate {
+  return typeof value === 'string' && (REGION_CLIMATES as readonly string[]).includes(value);
 }

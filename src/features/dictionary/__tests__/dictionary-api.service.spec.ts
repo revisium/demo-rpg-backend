@@ -1,71 +1,133 @@
 import { mock } from 'jest-mock-extended';
 import { ConfigService } from '@nestjs/config';
+import type { RevisionScope, RowModel, RowsConnection } from '@revisium/client';
+import { RevisiumClient } from '@revisium/client';
 import { DictionaryApiService } from '../dictionary-api.service';
-import { DictionaryProxyService } from '../dictionary-proxy.service';
+
+jest.mock('@revisium/client');
+
+const MockedClient = RevisiumClient as jest.MockedClass<typeof RevisiumClient>;
+
+function buildRow(id: string): RowModel {
+  return {
+    createdId: id,
+    id,
+    versionId: `v-${id}`,
+    createdAt: '2026-01-01T00:00:00Z',
+    updatedAt: '2026-01-01T00:00:00Z',
+    publishedAt: null,
+    readonly: false,
+    data: { climate: 'temperate' },
+  };
+}
 
 describe('DictionaryApiService', () => {
-  const buildService = (revisionId: string | undefined) => {
-    const proxy = mock<DictionaryProxyService>();
+  beforeEach(() => {
+    MockedClient.mockClear();
+  });
+
+  const buildConfig = (apiUrl: string | undefined) => {
     const config = mock<ConfigService>();
-    config.get.mockImplementation((key: string) =>
-      key === 'REVISIUM_DEMO_RPG_DATA_REVISION_ID' ? revisionId : undefined,
-    );
-    return { proxy, config, service: new DictionaryApiService(proxy, config) };
+    config.get.mockImplementation((key: string) => {
+      if (key === 'REVISIUM_API_URL') return apiUrl;
+      if (key === 'REVISIUM_USERNAME') return 'admin';
+      if (key === 'REVISIUM_PASSWORD') return 'admin';
+      return undefined;
+    });
+    return config;
   };
 
-  describe('getRegions', () => {
-    it('returns null when revision env is not configured', async () => {
-      const { proxy, service } = buildService(undefined);
-      const result = await service.getRegions({ first: 10, skip: 0 });
-      expect(result).toBeNull();
-      expect(proxy.getRows).not.toHaveBeenCalled();
-    });
+  it('skips client init when REVISIUM_API_URL is missing', async () => {
+    const service = new DictionaryApiService(buildConfig(undefined));
+    await service.onModuleInit();
 
-    it('forwards pagination options to the proxy when revision is configured', async () => {
-      const { proxy, service } = buildService('rev-123');
-      proxy.getRows.mockResolvedValue({ edges: [], totalCount: 0 });
-
-      await service.getRegions({ first: 5, skip: 2 });
-
-      expect(proxy.getRows).toHaveBeenCalledWith('regions', 'rev-123', { first: 5, skip: 2 });
-    });
+    expect(MockedClient).not.toHaveBeenCalled();
+    expect(await service.getRegions({})).toBeNull();
+    expect(await service.getRegion('any')).toBeNull();
   });
 
-  describe('getRegion', () => {
-    it('returns null when revision env is not configured', async () => {
-      const { proxy, service } = buildService(undefined);
-      const result = await service.getRegion('any-id');
-      expect(result).toBeNull();
-      expect(proxy.getRow).not.toHaveBeenCalled();
+  it('logs in then resolves the head scope on first request', async () => {
+    const scope = mock<RevisionScope>();
+    const connection: RowsConnection = {
+      edges: [{ cursor: 'c0', node: buildRow('verdant') }],
+      totalCount: 1,
+      pageInfo: { endCursor: 'c0', hasNextPage: false, hasPreviousPage: false },
+    };
+    scope.getRows.mockResolvedValue(connection);
+
+    const login = jest.fn().mockResolvedValue(undefined);
+    const revision = jest.fn().mockResolvedValue(scope);
+    MockedClient.mockImplementation(() => ({ login, revision }) as unknown as RevisiumClient);
+
+    const service = new DictionaryApiService(buildConfig('https://example.test'));
+    await service.onModuleInit();
+
+    expect(login).toHaveBeenCalledWith('admin', 'admin');
+
+    const result = await service.getRegions({ first: 25, after: 'c-prev' });
+
+    expect(revision).toHaveBeenCalledWith({
+      org: 'revisium',
+      project: 'demo-rpg-data',
+      branch: 'master',
+      revision: 'head',
     });
-
-    it('forwards regionId to the proxy when revision is configured', async () => {
-      const { proxy, service } = buildService('rev-123');
-      proxy.getRow.mockResolvedValue({ id: 'verdant-marches', data: {} });
-
-      await service.getRegion('verdant-marches');
-
-      expect(proxy.getRow).toHaveBeenCalledWith('regions', 'verdant-marches', 'rev-123');
-    });
+    expect(scope.getRows).toHaveBeenCalledWith('regions', { first: 25, after: 'c-prev' });
+    expect(result).toBe(connection);
   });
 
-  describe('getRows / getRow passthrough', () => {
-    it('delegates getRows to proxy with default empty opts', async () => {
-      const { proxy, service } = buildService(undefined);
-      proxy.getRows.mockResolvedValue({ edges: [] });
-
-      await service.getRows('factions', 'rev-x');
-
-      expect(proxy.getRows).toHaveBeenCalledWith('factions', 'rev-x', {});
+  it('caches the head scope across calls', async () => {
+    const scope = mock<RevisionScope>();
+    scope.getRows.mockResolvedValue({
+      edges: [],
+      totalCount: 0,
+      pageInfo: { hasNextPage: false, hasPreviousPage: false },
     });
 
-    it('delegates getRow to proxy', async () => {
-      const { proxy, service } = buildService(undefined);
-      proxy.getRow.mockResolvedValue(null);
+    const revision = jest.fn().mockResolvedValue(scope);
+    MockedClient.mockImplementation(
+      () =>
+        ({ login: jest.fn().mockResolvedValue(undefined), revision }) as unknown as RevisiumClient,
+    );
 
-      await service.getRow('factions', 'order-of-light', 'rev-x');
+    const service = new DictionaryApiService(buildConfig('https://example.test'));
+    await service.onModuleInit();
 
-      expect(proxy.getRow).toHaveBeenCalledWith('factions', 'order-of-light', 'rev-x');
-    });
+    await service.getRegions({});
+    await service.getRegions({ first: 10 });
+
+    expect(revision).toHaveBeenCalledTimes(1);
+  });
+
+  it('disables itself when login fails', async () => {
+    const login = jest.fn().mockRejectedValue(new Error('401 unauthorized'));
+    const revision = jest.fn();
+    MockedClient.mockImplementation(() => ({ login, revision }) as unknown as RevisiumClient);
+
+    const service = new DictionaryApiService(buildConfig('https://example.test'));
+    await service.onModuleInit();
+
+    expect(await service.getRegions({})).toBeNull();
+    expect(revision).not.toHaveBeenCalled();
+  });
+
+  it('returns null on getRegion when client throws (e.g. 404)', async () => {
+    const scope = mock<RevisionScope>();
+    scope.getRow.mockRejectedValue(new Error('Row not found'));
+
+    MockedClient.mockImplementation(
+      () =>
+        ({
+          login: jest.fn().mockResolvedValue(undefined),
+          revision: jest.fn().mockResolvedValue(scope),
+        }) as unknown as RevisiumClient,
+    );
+
+    const service = new DictionaryApiService(buildConfig('https://example.test'));
+    await service.onModuleInit();
+
+    const result = await service.getRegion('missing');
+    expect(result).toBeNull();
+    expect(scope.getRow).toHaveBeenCalledWith('regions', 'missing');
   });
 });

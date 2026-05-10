@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsInt, IsOptional, Min } from 'class-validator';
+import { IsInt, IsOptional, IsString, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class ListRegionsDto {
@@ -7,13 +7,11 @@ export class ListRegionsDto {
   @IsOptional()
   @Type(() => Number)
   @IsInt()
-  @Min(0)
+  @Min(1)
   first?: number;
 
-  @ApiPropertyOptional({ type: Number })
+  @ApiPropertyOptional({ type: String, description: 'Cursor from a previous page' })
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(0)
-  skip?: number;
+  @IsString()
+  after?: string;
 }

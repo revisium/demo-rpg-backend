@@ -1,17 +1,16 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
-import { IsInt, IsOptional, Min } from 'class-validator';
+import { IsInt, IsOptional, IsString, Min } from 'class-validator';
 
 @InputType()
 export class ListRegionsInput {
   @Field(() => Int, { nullable: true })
   @IsOptional()
   @IsInt()
-  @Min(0)
+  @Min(1)
   first?: number;
 
-  @Field(() => Int, { nullable: true })
+  @Field({ nullable: true })
   @IsOptional()
-  @IsInt()
-  @Min(0)
-  skip?: number;
+  @IsString()
+  after?: string;
 }

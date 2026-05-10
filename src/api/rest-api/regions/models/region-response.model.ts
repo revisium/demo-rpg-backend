@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   REGION_CLIMATES,
   RegionClimate,
@@ -29,10 +29,29 @@ export class RegionResponseModel {
   climate!: RegionClimate;
 }
 
+export class RegionEdgeResponseModel {
+  @ApiProperty()
+  cursor!: string;
+
+  @ApiProperty({ type: RegionResponseModel })
+  node!: RegionResponseModel;
+}
+
+export class RegionPageInfoResponseModel {
+  @ApiPropertyOptional()
+  endCursor?: string;
+
+  @ApiProperty()
+  hasNextPage!: boolean;
+}
+
 export class RegionsListResponseModel {
-  @ApiProperty({ type: [RegionResponseModel] })
-  edges!: RegionResponseModel[];
+  @ApiProperty({ type: [RegionEdgeResponseModel] })
+  edges!: RegionEdgeResponseModel[];
 
   @ApiProperty()
   totalCount!: number;
+
+  @ApiProperty({ type: RegionPageInfoResponseModel })
+  pageInfo!: RegionPageInfoResponseModel;
 }

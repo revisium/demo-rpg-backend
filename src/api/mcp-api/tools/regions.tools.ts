@@ -16,7 +16,7 @@ export class RegionsTools implements McpToolRegistrar {
       'list_regions',
       {
         description:
-          'List the regions of Eldoria from the demo-rpg-data dictionary subgraph. Optional pagination: first, skip.',
+          'List the regions of Eldoria from the demo-rpg-data dictionary subgraph. Cursor pagination via first / after.',
         inputSchema: {
           first: z
             .number()
@@ -24,18 +24,18 @@ export class RegionsTools implements McpToolRegistrar {
             .min(1)
             .max(MAX_PAGE_SIZE)
             .optional()
-            .describe('Page size, default 50'),
-          skip: z.number().int().min(0).optional().describe('Offset for pagination'),
+            .describe('Page size, default 100'),
+          after: z.string().optional().describe('Cursor from a previous page (RegionEdge.cursor)'),
         },
         annotations: { readOnlyHint: true },
       },
-      async (params: { first?: number; skip?: number }) => {
+      async (params: { first?: number; after?: string }) => {
         await auth.checkSystemPermission([
           { action: PermissionAction.read, subject: PermissionSubject.Region },
         ]);
         const result = await this.regionsApi.listRegions({
           first: params.first,
-          skip: params.skip,
+          after: params.after,
         });
         return {
           content: [{ type: 'text' as const, text: JSON.stringify(result, null, JSON_INDENT) }],
