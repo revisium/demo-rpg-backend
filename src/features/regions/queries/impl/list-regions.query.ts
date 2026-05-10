@@ -1,3 +1,5 @@
+import type { DemoRpgDataRegions } from 'src/__generated__/demo-rpg-data';
+
 export class ListRegionsQuery {
   constructor(public readonly data: { first?: number; after?: string }) {}
 }
@@ -8,20 +10,18 @@ export type ListRegionsQueryReturnType = {
   pageInfo: { endCursor?: string; hasNextPage: boolean };
 };
 
-export const REGION_CLIMATES = ['temperate', 'alpine', 'coastal', 'desert', 'forest'] as const;
-export type RegionClimate = (typeof REGION_CLIMATES)[number];
+export type RegionClimate = DemoRpgDataRegions['climate'];
+export const REGION_CLIMATES = [
+  'temperate',
+  'alpine',
+  'coastal',
+  'desert',
+  'forest',
+] as const satisfies readonly RegionClimate[];
 
-export interface LocalizedString {
-  en: string;
-  ru: string;
-  zh: string;
-}
+export type LocalizedString = DemoRpgDataRegions['name'];
 
 export interface RegionRow {
   id: string;
-  data: {
-    name: LocalizedString;
-    description: LocalizedString;
-    climate: RegionClimate;
-  };
+  data: DemoRpgDataRegions;
 }

@@ -1,1 +1,1100 @@
-[]
+[
+  {
+    "id": "2026-05-09T05:32:19.326Z",
+    "hash": "7bd2f7f6abc0d8e98b428f89fa1cde7a55c6a0bc",
+    "schema": {
+      "type": "object",
+      "required": ["name", "description", "climate"],
+      "properties": {
+        "name": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "climate": {
+          "enum": ["temperate", "alpine", "coastal", "desert", "forest"],
+          "type": "string",
+          "default": "temperate"
+        },
+        "description": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "regions",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T05:32:23.556Z",
+    "hash": "6ccab4cdfacec0014c956f27c5bbc808e445e560",
+    "schema": {
+      "type": "object",
+      "required": ["name", "description", "code"],
+      "properties": {
+        "code": { "type": "string", "default": "" },
+        "name": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "description": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "item_types",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T05:32:30.310Z",
+    "hash": "e88c964a5dcbc5aca5a3beb9661cc439c1a868aa",
+    "schema": {
+      "type": "object",
+      "required": ["code", "name", "abbreviation", "description"],
+      "properties": {
+        "code": { "type": "string", "default": "" },
+        "name": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "description": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "abbreviation": { "type": "string", "default": "" }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "stats",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T05:32:37.412Z",
+    "hash": "62c18344595d1406a111f2006c2c7f6dcbc9949f",
+    "schema": {
+      "type": "object",
+      "required": ["code", "name", "description", "kind", "default_duration"],
+      "properties": {
+        "code": { "type": "string", "default": "" },
+        "kind": {
+          "enum": ["buff", "debuff", "damage_over_time", "crowd_control"],
+          "type": "string",
+          "default": "buff"
+        },
+        "name": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "description": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "default_duration": { "type": "number", "default": 0 }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "effects",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T05:33:43.276Z",
+    "hash": "116bcdc67c08e3ca2a10b43cc20f80b2ffd06db0",
+    "schema": {
+      "type": "object",
+      "required": ["name", "description", "crest", "alignment"],
+      "properties": {
+        "name": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "crest": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
+        "alignment": {
+          "enum": ["lawful_good", "lawful_neutral", "neutral", "chaotic_neutral", "chaotic_evil"],
+          "type": "string",
+          "default": "neutral"
+        },
+        "description": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "factions",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T05:35:02.926Z",
+    "hash": "c559074bdd40ea6ccd0a2767a76f87477823b373",
+    "schema": {
+      "type": "object",
+      "required": [
+        "name",
+        "description",
+        "icon",
+        "school",
+        "kind",
+        "base_damage",
+        "damage_scaling",
+        "cooldown",
+        "level_required",
+        "effects"
+      ],
+      "properties": {
+        "icon": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
+        "kind": {
+          "enum": ["active", "passive", "reaction"],
+          "type": "string",
+          "default": "active"
+        },
+        "name": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "school": {
+          "enum": [
+            "abjuration",
+            "conjuration",
+            "divination",
+            "enchantment",
+            "evocation",
+            "illusion",
+            "necromancy",
+            "transmutation"
+          ],
+          "type": "string",
+          "default": "evocation"
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["effect_id", "chance", "duration"],
+            "properties": {
+              "chance": { "type": "number", "default": 0 },
+              "duration": { "type": "number", "default": 0 },
+              "effect_id": { "type": "string", "default": "", "foreignKey": "effects" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "cooldown": { "type": "number", "default": 0 },
+        "base_damage": { "type": "number", "default": 0 },
+        "description": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "damage_scaling": { "type": "number", "default": 0 },
+        "level_required": { "type": "number", "default": 1 }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "abilities",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T05:35:21.854Z",
+    "hash": "c2f9c105e4a5758797343fad7a4c88c6c5ca5c8b",
+    "schema": {
+      "type": "object",
+      "required": ["region_id", "name", "description", "map", "kind", "coordinates"],
+      "properties": {
+        "map": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
+        "kind": {
+          "enum": ["town", "village", "dungeon", "ruin", "wilderness"],
+          "type": "string",
+          "default": "town"
+        },
+        "name": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "region_id": { "type": "string", "default": "", "foreignKey": "regions" },
+        "coordinates": {
+          "type": "object",
+          "required": ["x", "y"],
+          "properties": {
+            "x": { "type": "number", "default": 0 },
+            "y": { "type": "number", "default": 0 }
+          },
+          "additionalProperties": false
+        },
+        "description": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "locations",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T05:36:05.585Z",
+    "hash": "111d7c78e81b48f746e3198f39ec349795755d81",
+    "schema": {
+      "type": "object",
+      "required": [
+        "name",
+        "description",
+        "primary_stat",
+        "base_hp",
+        "hp_per_level",
+        "mp_per_level",
+        "starting_ability_ids"
+      ],
+      "properties": {
+        "name": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "base_hp": { "type": "number", "default": 0 },
+        "description": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "hp_per_level": { "type": "number", "default": 0 },
+        "mp_per_level": { "type": "number", "default": 0 },
+        "primary_stat": {
+          "enum": ["strength", "dexterity", "intelligence", "wisdom", "constitution", "charisma"],
+          "type": "string",
+          "default": "strength"
+        },
+        "starting_ability_ids": {
+          "type": "array",
+          "items": { "type": "string", "default": "", "foreignKey": "abilities" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "classes",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T05:36:44.770Z",
+    "hash": "6fe66b81e7d1938c2afda860ee6d4a25dad6b09e",
+    "schema": {
+      "type": "object",
+      "required": [
+        "type_id",
+        "name",
+        "description",
+        "icon",
+        "rarity",
+        "rarity_multiplier",
+        "base_value",
+        "weight",
+        "modifiers",
+        "market_value",
+        "rarity_tag"
+      ],
+      "properties": {
+        "icon": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
+        "name": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "rarity": {
+          "enum": ["common", "uncommon", "rare", "epic", "legendary"],
+          "type": "string",
+          "default": "common"
+        },
+        "weight": { "type": "number", "default": 0 },
+        "type_id": { "type": "string", "default": "", "foreignKey": "item_types" },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["stat_id", "value"],
+            "properties": {
+              "value": { "type": "number", "default": 0 },
+              "stat_id": { "type": "string", "default": "", "foreignKey": "stats" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "base_value": { "type": "number", "default": 0 },
+        "rarity_tag": {
+          "type": "string",
+          "default": "common-tier",
+          "readOnly": true,
+          "x-formula": {
+            "version": 1,
+            "expression": "if(rarity == \"legendary\", \"epic-tier\", if(rarity == \"epic\", \"high-tier\", \"common-tier\"))"
+          }
+        },
+        "description": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "market_value": {
+          "type": "number",
+          "default": 0,
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "base_value * rarity_multiplier" }
+        },
+        "rarity_multiplier": { "type": "number", "default": 1 }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "items",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T05:37:32.604Z",
+    "hash": "06da7cb430883aef36e7130a7b284c6ffee9de49",
+    "schema": {
+      "type": "object",
+      "required": [
+        "faction_id",
+        "location_id",
+        "name",
+        "title",
+        "description",
+        "portrait",
+        "role",
+        "inventory_item_ids",
+        "display_label_en"
+      ],
+      "properties": {
+        "name": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "role": {
+          "enum": ["quest_giver", "merchant", "trainer", "lore_keeper"],
+          "type": "string",
+          "default": "quest_giver"
+        },
+        "title": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "portrait": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
+        "faction_id": { "type": "string", "default": "", "foreignKey": "factions" },
+        "description": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "location_id": { "type": "string", "default": "", "foreignKey": "locations" },
+        "display_label_en": {
+          "type": "string",
+          "default": "",
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "concat(title.en, \" \", name.en)" }
+        },
+        "inventory_item_ids": {
+          "type": "array",
+          "items": { "type": "string", "default": "", "foreignKey": "items" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "npcs",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T05:38:07.824Z",
+    "hash": "d6d74be20f2708179e93b01e44e7de53d7cf365e",
+    "schema": {
+      "type": "object",
+      "required": [
+        "faction_id",
+        "name",
+        "description",
+        "image",
+        "kind",
+        "level",
+        "hp",
+        "base_damage",
+        "ability_ids",
+        "drops",
+        "avg_drop_chance",
+        "max_drop_quantity",
+        "drop_count"
+      ],
+      "properties": {
+        "hp": { "type": "number", "default": 0 },
+        "kind": {
+          "enum": ["beast", "humanoid", "undead", "aberration", "construct"],
+          "type": "string",
+          "default": "beast"
+        },
+        "name": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "drops": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["item_id", "chance", "quantity_min", "quantity_max"],
+            "properties": {
+              "chance": { "type": "number", "default": 0 },
+              "item_id": { "type": "string", "default": "", "foreignKey": "items" },
+              "quantity_max": { "type": "number", "default": 0 },
+              "quantity_min": { "type": "number", "default": 0 }
+            },
+            "additionalProperties": false
+          }
+        },
+        "image": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
+        "level": { "type": "number", "default": 1 },
+        "drop_count": {
+          "type": "number",
+          "default": 0,
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "count(drops)" }
+        },
+        "faction_id": { "type": "string", "default": "", "foreignKey": "factions" },
+        "ability_ids": {
+          "type": "array",
+          "items": { "type": "string", "default": "", "foreignKey": "abilities" }
+        },
+        "base_damage": { "type": "number", "default": 0 },
+        "description": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "avg_drop_chance": {
+          "type": "number",
+          "default": 0,
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "avg(drops[*].chance)" }
+        },
+        "max_drop_quantity": {
+          "type": "number",
+          "default": 0,
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "max(drops[*].quantity_max)" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "monsters",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T05:38:32.884Z",
+    "hash": "fe2cb0ed1a63aa4360764ba0773d520b8ab2ed28",
+    "schema": {
+      "type": "object",
+      "required": [
+        "class_id",
+        "name",
+        "epithet",
+        "level",
+        "constitution",
+        "gold",
+        "portrait",
+        "ability_ids",
+        "inventory_item_ids",
+        "equipment",
+        "is_veteran",
+        "total_equipment_modifier",
+        "equipped_count",
+        "display_name_en"
+      ],
+      "properties": {
+        "gold": { "type": "number", "default": 0 },
+        "name": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "level": { "type": "number", "default": 1 },
+        "epithet": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "class_id": { "type": "string", "default": "", "foreignKey": "classes" },
+        "portrait": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
+        "equipment": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["slot", "item_id", "modifier"],
+            "properties": {
+              "slot": {
+                "enum": [
+                  "head",
+                  "chest",
+                  "legs",
+                  "hands",
+                  "feet",
+                  "main_hand",
+                  "off_hand",
+                  "ranged"
+                ],
+                "type": "string",
+                "default": "main_hand"
+              },
+              "item_id": { "type": "string", "default": "", "foreignKey": "items" },
+              "modifier": { "type": "number", "default": 0 }
+            },
+            "additionalProperties": false
+          }
+        },
+        "is_veteran": {
+          "type": "boolean",
+          "default": false,
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "level >= 10" }
+        },
+        "ability_ids": {
+          "type": "array",
+          "items": { "type": "string", "default": "", "foreignKey": "abilities" }
+        },
+        "constitution": { "type": "number", "default": 10 },
+        "equipped_count": {
+          "type": "number",
+          "default": 0,
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "count(equipment)" }
+        },
+        "display_name_en": {
+          "type": "string",
+          "default": "",
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "concat(name.en, \" \", epithet.en)" }
+        },
+        "inventory_item_ids": {
+          "type": "array",
+          "items": { "type": "string", "default": "", "foreignKey": "items" }
+        },
+        "total_equipment_modifier": {
+          "type": "number",
+          "default": 0,
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "sum(equipment[*].modifier)" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "heroes",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T05:41:40.511Z",
+    "hash": "13916c8b00bdd3bc9845225db80a34c0a0b5cf37",
+    "patches": [{ "op": "remove", "path": "/properties/max_drop_quantity" }],
+    "tableId": "monsters",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T05:43:30.837Z",
+    "hash": "fa919e8b161001ff31ff857432f34441e0ee47d2",
+    "schema": {
+      "type": "object",
+      "required": ["name", "motto", "formation", "hero_ids", "member_count", "is_full"],
+      "properties": {
+        "name": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "motto": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "is_full": {
+          "type": "boolean",
+          "default": false,
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "count(hero_ids) >= 4" }
+        },
+        "hero_ids": {
+          "type": "array",
+          "items": { "type": "string", "default": "", "foreignKey": "heroes" }
+        },
+        "formation": {
+          "enum": ["vanguard", "balanced", "defensive", "skirmisher"],
+          "type": "string",
+          "default": "balanced"
+        },
+        "member_count": {
+          "type": "number",
+          "default": 0,
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "count(hero_ids)" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "parties",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T05:44:13.006Z",
+    "hash": "be55607f3721d4bb820474518c9b4f3ea144cf0c",
+    "schema": {
+      "type": "object",
+      "required": [
+        "giver_npc_id",
+        "name",
+        "description",
+        "map",
+        "kind",
+        "level_required",
+        "is_repeatable",
+        "steps",
+        "total_xp",
+        "total_loot_xp",
+        "step_count"
+      ],
+      "properties": {
+        "map": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
+        "kind": {
+          "enum": ["tutorial", "side", "story", "endgame"],
+          "type": "string",
+          "default": "side"
+        },
+        "name": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["step_number", "description", "location_id", "npc_id", "xp", "rewards"],
+            "properties": {
+              "xp": { "type": "number", "default": 0 },
+              "npc_id": { "type": "string", "default": "", "foreignKey": "npcs" },
+              "rewards": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["item_id", "quantity", "bonus_xp"],
+                  "properties": {
+                    "item_id": { "type": "string", "default": "", "foreignKey": "items" },
+                    "bonus_xp": { "type": "number", "default": 0 },
+                    "quantity": { "type": "number", "default": 0 }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "description": {
+                "type": "object",
+                "required": ["en"],
+                "properties": {
+                  "ch": { "type": "string", "default": "" },
+                  "en": { "type": "string", "default": "" },
+                  "ru": { "type": "string", "default": "" }
+                },
+                "additionalProperties": false
+              },
+              "location_id": { "type": "string", "default": "", "foreignKey": "locations" },
+              "step_number": { "type": "number", "default": 0 }
+            },
+            "additionalProperties": false
+          }
+        },
+        "total_xp": {
+          "type": "number",
+          "default": 0,
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "sum(steps[*].xp)" }
+        },
+        "step_count": {
+          "type": "number",
+          "default": 0,
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "count(steps)" }
+        },
+        "description": {
+          "type": "object",
+          "required": ["en"],
+          "properties": {
+            "ch": { "type": "string", "default": "" },
+            "en": { "type": "string", "default": "" },
+            "ru": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "giver_npc_id": { "type": "string", "default": "", "foreignKey": "npcs" },
+        "is_repeatable": { "type": "boolean", "default": false },
+        "total_loot_xp": {
+          "type": "number",
+          "default": 0,
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "sum(steps[*].rewards[*].bonus_xp)" }
+        },
+        "level_required": { "type": "number", "default": 1 }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "quests",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T05:44:35.356Z",
+    "hash": "aec6fab292c96a89e34d8d3436d76a7d9b464098",
+    "schema": {
+      "type": "object",
+      "required": ["npc_id", "slug", "lines", "line_count"],
+      "properties": {
+        "slug": { "type": "string", "default": "" },
+        "lines": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["speaker", "text", "emotion"],
+            "properties": {
+              "text": {
+                "type": "object",
+                "required": ["en"],
+                "properties": {
+                  "ch": { "type": "string", "default": "" },
+                  "en": { "type": "string", "default": "" },
+                  "ru": { "type": "string", "default": "" }
+                },
+                "additionalProperties": false
+              },
+              "emotion": {
+                "enum": ["neutral", "happy", "angry", "sad", "surprised"],
+                "type": "string",
+                "default": "neutral"
+              },
+              "speaker": {
+                "enum": ["npc", "hero"],
+                "type": "string",
+                "default": "npc"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "npc_id": { "type": "string", "default": "", "foreignKey": "npcs" },
+        "line_count": {
+          "type": "number",
+          "default": 0,
+          "readOnly": true,
+          "x-formula": { "version": 1, "expression": "count(lines)" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "tableId": "dialogs",
+    "changeType": "init"
+  },
+  {
+    "id": "2026-05-09T07:00:40.871Z",
+    "hash": "ab559b7ae841b0461716565368894611563217f4",
+    "patches": [
+      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
+      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+    ],
+    "tableId": "regions",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T07:03:01.040Z",
+    "hash": "2ac30d7ed2f6405637e6a853d93684777f9d3f6b",
+    "patches": [
+      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
+      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+    ],
+    "tableId": "item_types",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T07:03:02.179Z",
+    "hash": "24f5d67108575186bda142d1dd828ebd26777fef",
+    "patches": [
+      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
+      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+    ],
+    "tableId": "stats",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T07:03:03.326Z",
+    "hash": "0f1679898bb84773ee38cbf73c8bb86a03c92f05",
+    "patches": [
+      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
+      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+    ],
+    "tableId": "effects",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T07:03:04.365Z",
+    "hash": "e8ef10280030f735505c0717bbf2dff441cd574e",
+    "patches": [
+      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
+      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+    ],
+    "tableId": "factions",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T07:05:58.081Z",
+    "hash": "15e77b960937643bfad24861fc5d25e9cb90c62a",
+    "patches": [
+      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
+      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+    ],
+    "tableId": "abilities",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T07:05:59.141Z",
+    "hash": "4c16832d4be1561f8e09de88138a61da43c99bc8",
+    "patches": [
+      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
+      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+    ],
+    "tableId": "locations",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T07:06:00.576Z",
+    "hash": "bc05d867ad661f34119d416fcb9432ee584dcbba",
+    "patches": [
+      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
+      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+    ],
+    "tableId": "classes",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T07:06:01.611Z",
+    "hash": "f48d87a1e2a13c0b4b3d7e51467977e4d1743f1b",
+    "patches": [
+      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
+      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+    ],
+    "tableId": "items",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T07:07:55.585Z",
+    "hash": "94951f0a19b7219cafed045fd64514f0bdad7cd7",
+    "patches": [
+      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
+      { "op": "move", "from": "/properties/title/properties/ch", "path": "/properties/title/properties/zh" },
+      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+    ],
+    "tableId": "npcs",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T07:07:56.852Z",
+    "hash": "ae35d2d68a9234639ae2df43853638b58d2925a2",
+    "patches": [
+      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
+      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+    ],
+    "tableId": "monsters",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T07:07:57.971Z",
+    "hash": "d8f1ba30fc9efc11216bb9b617e5a8b502b51734",
+    "patches": [
+      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
+      { "op": "move", "from": "/properties/epithet/properties/ch", "path": "/properties/epithet/properties/zh" }
+    ],
+    "tableId": "heroes",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T07:07:58.916Z",
+    "hash": "789eb4ebaa15864af18b554ba8c1864b77028f8e",
+    "patches": [
+      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
+      { "op": "move", "from": "/properties/motto/properties/ch", "path": "/properties/motto/properties/zh" }
+    ],
+    "tableId": "parties",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T07:09:45.829Z",
+    "hash": "8a249b5424269e7c61d887185dac5559e2815eae",
+    "patches": [
+      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
+      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" },
+      { "op": "move", "from": "/properties/steps/items/properties/description/properties/ch", "path": "/properties/steps/items/properties/description/properties/zh" }
+    ],
+    "tableId": "quests",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-09T07:09:46.788Z",
+    "hash": "f32461e6e7afd83b4dd145146679c1e45b50147d",
+    "patches": [
+      { "op": "move", "from": "/properties/lines/items/properties/text/properties/ch", "path": "/properties/lines/items/properties/text/properties/zh" }
+    ],
+    "tableId": "dialogs",
+    "changeType": "update"
+  }
+]
