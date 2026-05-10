@@ -6,11 +6,13 @@ export class DictionaryProxyService implements OnModuleInit {
   private readonly logger = new Logger(DictionaryProxyService.name);
   private apiUrl = '';
   private token = '';
+  private timeoutMs = DEFAULT_TIMEOUT_MS;
 
   constructor(private readonly configService: ConfigService) {}
 
   async onModuleInit() {
     this.apiUrl = this.configService.get('REVISIUM_API_URL') || '';
+    this.timeoutMs = parseTimeoutMs(this.configService.get('REVISIUM_HTTP_TIMEOUT_MS'));
     if (!this.apiUrl) {
       this.logger.warn('REVISIUM_API_URL not configured, dictionary service disabled');
       return;
@@ -27,6 +29,7 @@ export class DictionaryProxyService implements OnModuleInit {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: `${username}@example.com`, password }),
+        signal: AbortSignal.timeout(this.timeoutMs),
       });
 
       if (!response.ok) {
@@ -55,7 +58,10 @@ export class DictionaryProxyService implements OnModuleInit {
     try {
       const response = await fetch(
         `${this.apiUrl}/api/revision/${encodeURIComponent(revisionId)}/tables/${encodeURIComponent(tableId)}/rows?${params.toString()}`,
-        { headers: { Authorization: `Bearer ${this.token}` } },
+        {
+          headers: { Authorization: `Bearer ${this.token}` },
+          signal: AbortSignal.timeout(this.timeoutMs),
+        },
       );
 
       if (!response.ok) {
@@ -76,7 +82,10 @@ export class DictionaryProxyService implements OnModuleInit {
     try {
       const response = await fetch(
         `${this.apiUrl}/api/revision/${encodeURIComponent(revisionId)}/tables/${encodeURIComponent(tableId)}/rows/${encodeURIComponent(rowId)}`,
-        { headers: { Authorization: `Bearer ${this.token}` } },
+        {
+          headers: { Authorization: `Bearer ${this.token}` },
+          signal: AbortSignal.timeout(this.timeoutMs),
+        },
       );
 
       if (!response.ok) return null;
@@ -90,3 +99,13 @@ export class DictionaryProxyService implements OnModuleInit {
 }
 
 const DEFAULT_PAGE_SIZE = 100;
+const DEFAULT_TIMEOUT_MS = 5000;
+
+function parseTimeoutMs(raw: unknown): number {
+  if (typeof raw === 'number' && Number.isFinite(raw) && raw > 0) return raw;
+  if (typeof raw === 'string') {
+    const parsed = Number(raw);
+    if (Number.isFinite(parsed) && parsed > 0) return parsed;
+  }
+  return DEFAULT_TIMEOUT_MS;
+}

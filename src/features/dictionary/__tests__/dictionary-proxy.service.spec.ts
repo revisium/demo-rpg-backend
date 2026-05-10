@@ -16,13 +16,13 @@ describe('DictionaryProxyService', () => {
     jest.restoreAllMocks();
   });
 
-  const build = (apiUrl: string | undefined) => {
+  const build = (apiUrl: string | undefined, extraConfig: Record<string, unknown> = {}) => {
     const config = mock<ConfigService>();
     config.get.mockImplementation((key: string) => {
       if (key === 'REVISIUM_API_URL') return apiUrl;
       if (key === 'REVISIUM_USERNAME') return 'admin';
       if (key === 'REVISIUM_PASSWORD') return 'admin';
-      return undefined;
+      return extraConfig[key];
     });
     return new DictionaryProxyService(config);
   };
@@ -135,6 +135,65 @@ describe('DictionaryProxyService', () => {
       const proxy = build('https://example.test');
       fetchMock.mockRejectedValueOnce(new Error('network'));
       await expect(proxy.onModuleInit()).resolves.toBeUndefined();
+    });
+  });
+
+  describe('timeout', () => {
+    it('attaches an AbortSignal to every fetch call', async () => {
+      const proxy = build('https://example.test', { REVISIUM_HTTP_TIMEOUT_MS: '1000' });
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ accessToken: 'token-abc' }),
+      });
+      await proxy.onModuleInit();
+
+      const authInit = fetchMock.mock.calls[0]![1] as RequestInit;
+      expect(authInit.signal).toBeInstanceOf(AbortSignal);
+
+      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ edges: [] }) });
+      await proxy.getRows('regions', 'rev-1');
+      const getRowsInit = fetchMock.mock.calls[1]![1] as RequestInit;
+      expect(getRowsInit.signal).toBeInstanceOf(AbortSignal);
+
+      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ id: 'a' }) });
+      await proxy.getRow('regions', 'a', 'rev-1');
+      const getRowInit = fetchMock.mock.calls[2]![1] as RequestInit;
+      expect(getRowInit.signal).toBeInstanceOf(AbortSignal);
+    });
+
+    it('falls back to the default when REVISIUM_HTTP_TIMEOUT_MS is malformed', async () => {
+      const proxy = build('https://example.test', { REVISIUM_HTTP_TIMEOUT_MS: 'not-a-number' });
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ accessToken: 'token-abc' }),
+      });
+      await expect(proxy.onModuleInit()).resolves.toBeUndefined();
+      expect(fetchMock.mock.calls[0]![1]).toMatchObject({ signal: expect.any(AbortSignal) });
+    });
+
+    it('returns empty edges when fetch is aborted by timeout', async () => {
+      const proxy = build('https://example.test', { REVISIUM_HTTP_TIMEOUT_MS: 5 });
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ accessToken: 'token-abc' }),
+      });
+      await proxy.onModuleInit();
+
+      fetchMock.mockImplementationOnce((_url, init) => {
+        return new Promise((_resolve, reject) => {
+          const signal = (init as RequestInit).signal as AbortSignal | undefined;
+          if (signal) {
+            signal.addEventListener('abort', () => {
+              const err: Error & { name?: string } = new Error('aborted');
+              err.name = 'AbortError';
+              reject(err);
+            });
+          }
+        });
+      });
+
+      const result = await proxy.getRows('regions', 'rev-1');
+      expect(result).toEqual({ edges: [] });
     });
   });
 });

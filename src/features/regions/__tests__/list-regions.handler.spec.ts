@@ -61,6 +61,24 @@ describe('ListRegionsHandler', () => {
     expect(result).toEqual({ edges: [], totalCount: 0 });
   });
 
+  it.each([
+    ['string', '5'],
+    ['negative', -1],
+    ['NaN', Number.NaN],
+    ['Infinity', Number.POSITIVE_INFINITY],
+  ])('falls back to edges length when totalCount is %s', async (_label, badCount) => {
+    const dictionary = mock<DictionaryApiService>();
+    dictionary.getRegions.mockResolvedValue({
+      edges: [{ node: buildRow('a') }, { node: buildRow('b') }],
+      totalCount: badCount,
+    });
+
+    const handler = new ListRegionsHandler(dictionary);
+    const result = await handler.execute(new ListRegionsQuery({}));
+
+    expect(result.totalCount).toBe(2);
+  });
+
   it('skips malformed edges (missing node.id or non-object data)', async () => {
     const dictionary = mock<DictionaryApiService>();
     dictionary.getRegions.mockResolvedValue({
