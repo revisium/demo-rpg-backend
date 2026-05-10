@@ -39,7 +39,8 @@ function runCli(args: string[], step: string): void {
   console.log(`→ ${step}`);
   const result = spawnSync('npx', args, { stdio: 'inherit' });
   if (result.status !== 0) {
-    throw new Error(`${step} failed: npx ${args.join(' ')} exited with code ${result.status}`);
+    const safeArgs = args.map((arg) => arg.replace(/([?&]token=)[^&]+/i, '$1<redacted>'));
+    throw new Error(`${step} failed: npx ${safeArgs.join(' ')} exited with code ${result.status}`);
   }
 }
 
@@ -49,20 +50,24 @@ async function saveOpenApiSpec(token: string): Promise<void> {
   const headers = { Authorization: `Bearer ${token}` };
   // Endpoint registration can take a moment to propagate after creation.
   const maxAttempts = 5;
-  let lastStatus = 0;
+  let lastError = '';
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    const res = await fetch(url, { headers });
-    if (res.ok) {
-      const spec = (await res.json()) as Record<string, unknown>;
-      const path = join(process.cwd(), 'revisium', 'openapi.json');
-      writeFileSync(path, JSON.stringify(spec, null, 2) + '\n');
-      console.log(`✓ Saved OpenAPI spec → ${path}`);
-      return;
+    try {
+      const res = await fetch(url, { headers });
+      if (res.ok) {
+        const spec = (await res.json()) as Record<string, unknown>;
+        const path = join(process.cwd(), 'revisium', 'openapi.json');
+        writeFileSync(path, JSON.stringify(spec, null, 2) + '\n');
+        console.log(`✓ Saved OpenAPI spec → ${path}`);
+        return;
+      }
+      lastError = `HTTP ${res.status}`;
+    } catch (err) {
+      lastError = err instanceof Error ? err.message : String(err);
     }
-    lastStatus = res.status;
     await new Promise((resolve) => setTimeout(resolve, 500 * attempt));
   }
-  throw new Error(`Failed to fetch OpenAPI spec after ${maxAttempts} attempts: HTTP ${lastStatus}`);
+  throw new Error(`Failed to fetch OpenAPI spec after ${maxAttempts} attempts: ${lastError}`);
 }
 
 async function main() {
