@@ -87,7 +87,7 @@ npm run revisium:bootstrap      # re-apply everything
 revisium project ensure                                         --context demo-rpg
 revisium migrate apply --file ./revisium/migrations.json --commit --context demo-rpg
 revisium endpoint ensure --type REST_API                        --context demo-rpg-head
-curl -sf http://localhost:8888/.../openapi.json -o revisium/openapi.json
+curl -sf http://localhost:8888/endpoint/openapi/admin/demo-rpg-data/master/head/openapi.json -o revisium/openapi.json
 npx @hey-api/openapi-ts
 ```
 
