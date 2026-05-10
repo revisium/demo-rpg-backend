@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "currentContext": "demo-rpg",
+  "instances": {
+    "local": {
+      "baseUrl": "http://localhost:8888",
+      "authMode": "none"
+    }
+  },
+  "contexts": {
+    "demo-rpg": {
+      "instance": "local",
+      "organization": "admin",
+      "project": "demo-rpg-data",
+      "branch": "master",
+      "revision": "draft"
+    },
+    "demo-rpg-head": {
+      "instance": "local",
+      "organization": "admin",
+      "project": "demo-rpg-data",
+      "branch": "master",
+      "revision": "head"
+    }
+  }
+}

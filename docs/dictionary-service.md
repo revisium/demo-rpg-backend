@@ -34,10 +34,9 @@ npm install
 
 # 2. start the standalone Revisium server (long-running — keep in its own terminal)
 npm run revisium:standalone
-# → http://localhost:8888  (admin UI + REST + GraphQL endpoints)
+# → http://localhost:8888  (admin UI + REST + GraphQL endpoints, no auth)
 # → embedded PostgreSQL on port 5441
 # → data persisted in ./revisium/data/  (gitignored)
-# → admin user created on first run, ADMIN_PASSWORD env or `admin`
 
 # 3. in a second terminal, apply migrations + create REST endpoint + save spec + regenerate the client
 npm run revisium:bootstrap
@@ -49,7 +48,7 @@ npm run start:dev
 
 After bootstrap:
 
-- **Local Admin UI**: `http://localhost:8888` (login `admin / admin` — change via `ADMIN_PASSWORD`)
+- **Local Admin UI**: `http://localhost:8888` (no auth required for local standalone)
 - **OpenAPI spec**: `http://localhost:8888/endpoint/openapi/admin/demo-rpg-data/master/head/openapi.json`
 - **REST root for the backend**: `http://localhost:8888/endpoint/rest/admin/demo-rpg-data/master/head`
 
@@ -82,17 +81,17 @@ npm run revisium:bootstrap      # re-apply everything
 
 ### What `revisium:bootstrap` actually does
 
-`scripts/revisium-bootstrap.ts` is thin orchestration around the `revisium` CLI (alpha). It runs:
+`scripts/revisium-bootstrap.sh` is a 6-line shell script that runs the `revisium` CLI (alpha) commands against the local standalone. Targets are resolved from `.revisium/revisium-cli.config.json` (committed to git) — no `--url`, no auth flags:
 
-```bash
-revisium project ensure  --url revisium://admin@<host>/admin/demo-rpg-data/master
-revisium migrate apply   --file ./revisium/migrations.json --commit \
-                         --url revisium://admin@<host>/admin/demo-rpg-data/master:draft
-revisium endpoint ensure --type REST_API \
-                         --url revisium://admin@<host>/admin/demo-rpg-data/master:head
+```sh
+revisium project ensure                                         --context demo-rpg
+revisium migrate apply --file ./revisium/migrations.json --commit --context demo-rpg
+revisium endpoint ensure --type REST_API                        --context demo-rpg-head
+curl -sf http://localhost:8888/.../openapi.json -o revisium/openapi.json
+npx @hey-api/openapi-ts
 ```
 
-…then fetches `/endpoint/openapi/admin/demo-rpg-data/master/head/openapi.json`, writes it to `revisium/openapi.json`, and runs `npx @hey-api/openapi-ts`. The TS wrapper only handles the password→JWT exchange (no `revisium auth login` for password-mode standalones yet) and the spec fetch + codegen call. Everything else is the CLI.
+The committed config registers a single no-auth instance (`local`) and two contexts (`demo-rpg` for the draft revision and `demo-rpg-head` for endpoint registration). It contains **no credentials** — only URLs and target metadata.
 
 The `--url` argument format is documented at <https://github.com/revisium/revisium-cli/blob/master/docs/url-format.md>.
 
@@ -110,7 +109,7 @@ npm run revisium:apply-migrations
 
 ## Production / K8s
 
-In the demo cluster, `demo-rpg-data` runs in its own dedicated `revisium/revisium` pod under the `demo-dev` namespace. The `migrations-job` Helm hook applies `revisium/migrations.json` on every deploy:
+In the demo cluster, `demo-rpg-data` runs in its own dedicated `revisium/revisium` pod under the `demo-dev` namespace, with auth enabled. The `migrations-job` Helm hook applies `revisium/migrations.json` on every deploy:
 
 ```bash
 # inside the migrations-job pod
@@ -119,9 +118,12 @@ npm run prisma:migrate:deploy
 npm run seed:prod
 ```
 
-The cluster Revisium pod's REST URL — `http://dev-demo-revisium-application.demo-dev.svc.cluster.local:80/endpoint/rest/admin/demo-rpg-data/master/head` — is what gets injected into the backend pod as `REVISIUM_DEMO_RPG_DATA_URL` via Helm values.
+Auth in the cluster uses an API key, not the local no-auth instance:
 
-The migrations-job uses `REVISIUM_URL` (a `revisium://…?token=…` connection URL) to talk to the cluster Revisium, not the same `REVISIUM_DEMO_RPG_DATA_URL` the runtime uses.
+- A `RPG_REVISIUM_API_KEY` Secret is provisioned in `demo-dev`
+- The migrations-Job sets `REVISIUM_API_KEY` from that Secret — the CLI picks it up automatically
+- The cluster Revisium pod's REST URL — `http://dev-demo-revisium-application.demo-dev.svc.cluster.local:80/endpoint/rest/admin/demo-rpg-data/master/head` — is injected into the backend pod as `REVISIUM_DEMO_RPG_DATA_URL` via Helm values
+- The runtime backend doesn't need the API key — the demo-rpg-data project's REST endpoint is public-read on the cluster instance
 
 See `revisium/infrastructure → development/demo/{revisium,backend}/values.yaml` for the chart wiring.
 
@@ -130,11 +132,9 @@ See `revisium/infrastructure → development/demo/{revisium,backend}/values.yaml
 | Variable | Used by | Description |
 |---|---|---|
 | `REVISIUM_DEMO_RPG_DATA_URL` | runtime backend | REST base URL the generated client targets. Empty disables the dictionary; `regions` queries return empty connections. |
-| `REVISIUM_URL` | migrations-job (K8s) | `revisium://…?token=…` connection URL the `revisium-cli` uses to apply migrations. Not consumed at runtime. |
-| `REVISIUM_USERNAME`, `REVISIUM_PASSWORD` | bootstrap script only | Used by `scripts/revisium-bootstrap.ts` to log into the local standalone. Not consumed at runtime. |
-| `REVISIUM_STANDALONE_URL` | bootstrap script only | Where the bootstrap script reaches the local standalone. Default `http://localhost:8888`. |
+| `REVISIUM_API_KEY` | K8s migrations-Job | API key for the cluster Revisium pod. Read by `revisium-cli` automatically when set. Not consumed at runtime. |
 
-See [`ENV.md`](../ENV.md) for the full reference.
+See [`ENV.md`](../ENV.md) for the full reference. Local dev needs neither — the standalone runs without auth and targets are resolved from `.revisium/revisium-cli.config.json`.
 
 ## Adding a new domain that reads from the dictionary
 
