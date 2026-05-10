@@ -11,22 +11,21 @@ const ORG = 'admin';
 const PROJECT = 'demo-rpg-data';
 const BRANCH = 'master';
 
-async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init);
-  if (!res.ok) {
-    const body = await res.text().catch(() => '');
-    throw new Error(`${init?.method ?? 'GET'} ${url} → ${res.status}: ${body || res.statusText}`);
-  }
-  return res.json() as Promise<T>;
+function buildUrl(token: string, revision: 'draft' | 'head' | null): string {
+  const { host } = new URL(STANDALONE_URL);
+  const target = revision === null ? BRANCH : `${BRANCH}:${revision}`;
+  return `revisium://${ADMIN_USERNAME}@${host}/${ORG}/${PROJECT}/${target}?token=${token}`;
 }
 
 async function login(): Promise<string> {
   try {
-    const body = await fetchJson<{ accessToken: string }>(`${STANDALONE_URL}/api/auth/login`, {
+    const res = await fetch(`${STANDALONE_URL}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ emailOrUsername: ADMIN_USERNAME, password: ADMIN_PASSWORD }),
     });
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text()}`);
+    const body = (await res.json()) as { accessToken: string };
     return body.accessToken;
   } catch (err) {
     throw new Error(
@@ -36,12 +35,53 @@ async function login(): Promise<string> {
   }
 }
 
-function applyMigrations(token: string) {
-  console.log('→ Applying migrations from revisium/migrations.json…');
-  const { host } = new URL(STANDALONE_URL);
-  const url = `revisium://${ADMIN_USERNAME}@${host}/${ORG}/${PROJECT}/${BRANCH}/draft?token=${token}`;
-  const result = spawnSync(
-    'npx',
+function runCli(args: string[], step: string): void {
+  console.log(`→ ${step}`);
+  const result = spawnSync('npx', args, { stdio: 'inherit' });
+  if (result.status !== 0) {
+    const safeArgs = args.map((arg) => arg.replace(/([?&]token=)[^&]+/i, '$1<redacted>'));
+    throw new Error(`${step} failed: npx ${safeArgs.join(' ')} exited with code ${result.status}`);
+  }
+}
+
+async function saveOpenApiSpec(token: string): Promise<void> {
+  console.log('→ Fetching OpenAPI spec from /master/head…');
+  const url = `${STANDALONE_URL}/endpoint/openapi/${ORG}/${PROJECT}/${BRANCH}/head/openapi.json`;
+  const headers = { Authorization: `Bearer ${token}` };
+  // Endpoint registration can take a moment to propagate after creation.
+  const maxAttempts = 5;
+  let lastError = '';
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const res = await fetch(url, { headers });
+      if (res.ok) {
+        const spec = (await res.json()) as Record<string, unknown>;
+        const path = join(process.cwd(), 'revisium', 'openapi.json');
+        writeFileSync(path, JSON.stringify(spec, null, 2) + '\n');
+        console.log(`✓ Saved OpenAPI spec → ${path}`);
+        return;
+      }
+      lastError = `HTTP ${res.status}`;
+    } catch (err) {
+      lastError = err instanceof Error ? err.message : String(err);
+    }
+    await new Promise((resolve) => setTimeout(resolve, 500 * attempt));
+  }
+  throw new Error(`Failed to fetch OpenAPI spec after ${maxAttempts} attempts: ${lastError}`);
+}
+
+async function main() {
+  console.log(`# Revisium bootstrap (standalone at ${STANDALONE_URL})`);
+  const token = await login();
+
+  // 1. Ensure project + branch exist (idempotent).
+  runCli(
+    ['revisium', 'project', 'ensure', '--url', buildUrl(token, null)],
+    'revisium project ensure',
+  );
+
+  // 2. Apply migrations on draft and commit to head.
+  runCli(
     [
       'revisium',
       'migrate',
@@ -49,83 +89,30 @@ function applyMigrations(token: string) {
       '--file',
       './revisium/migrations.json',
       '--commit',
-      '--create-project',
       '--url',
-      url,
+      buildUrl(token, 'draft'),
     ],
-    { stdio: 'inherit' },
-  );
-  if (result.status !== 0) {
-    throw new Error(`revisium migrate apply exited with code ${result.status}`);
-  }
-}
-
-async function ensureRestEndpoint(token: string): Promise<boolean> {
-  const headers = { Authorization: `Bearer ${token}` };
-  const draft = await fetchJson<{ id: string }>(
-    `${STANDALONE_URL}/api/organization/${ORG}/projects/${PROJECT}/branches/${BRANCH}/draft-revision`,
-    { headers },
+    'revisium migrate apply',
   );
 
-  const existing = await fetchJson<Array<{ type: string; isDeleted: boolean }>>(
-    `${STANDALONE_URL}/api/revision/${draft.id}/endpoints`,
-    { headers },
+  // 3. Ensure REST endpoint on head (idempotent — endpoints attach directly to head).
+  runCli(
+    [
+      'revisium',
+      'endpoint',
+      'ensure',
+      '--type',
+      'REST_API',
+      '--url',
+      buildUrl(token, 'head'),
+    ],
+    'revisium endpoint ensure',
   );
-  if (existing.some((e) => e.type === 'REST_API' && !e.isDeleted)) {
-    console.log('→ REST_API endpoint already exists.');
-    return false;
-  }
 
-  console.log('→ Creating REST_API endpoint on draft…');
-  await fetchJson(`${STANDALONE_URL}/api/revision/${draft.id}/endpoints`, {
-    method: 'POST',
-    headers: { ...headers, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ type: 'REST_API' }),
-  });
-  return true;
-}
-
-async function commitDraft(token: string, comment: string): Promise<void> {
-  console.log(`→ Publishing draft → head (${comment})…`);
-  await fetchJson(
-    `${STANDALONE_URL}/api/organization/${ORG}/projects/${PROJECT}/branches/${BRANCH}/create-revision`,
-    {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ comment }),
-    },
-  );
-}
-
-async function saveOpenApiSpec(token: string): Promise<void> {
-  console.log('→ Fetching OpenAPI spec from /master/head…');
-  const url = `${STANDALONE_URL}/endpoint/openapi/${ORG}/${PROJECT}/${BRANCH}/head/openapi.json`;
-  const spec = await fetchJson<Record<string, unknown>>(url, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  const path = join(process.cwd(), 'revisium', 'openapi.json');
-  writeFileSync(path, JSON.stringify(spec, null, 2) + '\n');
-  console.log(`✓ Saved OpenAPI spec → ${path}`);
-}
-
-function runCodegen() {
-  console.log('→ Running @hey-api/openapi-ts…');
-  const result = spawnSync('npx', ['@hey-api/openapi-ts'], { stdio: 'inherit' });
-  if (result.status !== 0) {
-    throw new Error(`openapi-ts codegen exited with code ${result.status}`);
-  }
-}
-
-async function main() {
-  console.log(`# Revisium bootstrap (standalone at ${STANDALONE_URL})`);
-  const token = await login();
-  applyMigrations(token);
-  const created = await ensureRestEndpoint(token);
-  if (created) {
-    await commitDraft(token, 'bootstrap: publish REST endpoint');
-  }
+  // 4. Capture spec + regenerate the typed client.
   await saveOpenApiSpec(token);
-  runCodegen();
+  runCli(['@hey-api/openapi-ts'], '@hey-api/openapi-ts');
+
   console.log('✓ Bootstrap complete. Generated client in src/__generated__/demo-rpg-data');
 }
 
