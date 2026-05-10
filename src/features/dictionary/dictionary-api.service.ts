@@ -26,12 +26,17 @@ export class DictionaryApiService implements OnModuleInit {
       this.logger.warn('REVISIUM_API_URL not configured; dictionary calls return empty.');
       return;
     }
+    const username = this.config.get<string>('REVISIUM_USERNAME');
+    const password = this.config.get<string>('REVISIUM_PASSWORD');
+    if (!username || !password) {
+      this.logger.error(
+        'REVISIUM_USERNAME / REVISIUM_PASSWORD not set; dictionary integration disabled.',
+      );
+      return;
+    }
     this.client = new RevisiumClient({ baseUrl });
     try {
-      await this.client.login(
-        this.config.get<string>('REVISIUM_USERNAME') ?? 'admin',
-        this.config.get<string>('REVISIUM_PASSWORD') ?? 'admin',
-      );
+      await this.client.login(username, password);
       this.logger.log('Revisium client authenticated');
     } catch (err) {
       this.logger.error('Revisium login failed', err instanceof Error ? err.message : err);
@@ -61,7 +66,7 @@ export class DictionaryApiService implements OnModuleInit {
     }
   }
 
-  private getDataScope(): Promise<RevisionScope> | null {
+  private async getDataScope(): Promise<RevisionScope | null> {
     if (!this.client) return null;
     this.dataScope ??= this.client.revision({
       org: DATA_ORG,
@@ -69,6 +74,14 @@ export class DictionaryApiService implements OnModuleInit {
       branch: DATA_BRANCH,
       revision: 'head',
     });
-    return this.dataScope;
+    try {
+      return await this.dataScope;
+    } catch (err) {
+      this.logger.warn(
+        `Failed to resolve head scope for ${DATA_ORG}/${DATA_PROJECT}/${DATA_BRANCH}: ${err instanceof Error ? err.message : err}`,
+      );
+      this.dataScope = null;
+      return null;
+    }
   }
 }

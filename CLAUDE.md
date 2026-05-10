@@ -34,7 +34,7 @@ All three layers call the same `*ApiService` facade. Business logic lives **only
 
 ### Dictionary Service (Revisium integration)
 
-- `src/features/dictionary/` — proxy + API service for Revisium data
+- `src/features/dictionary/` — wraps `@revisium/client`. **Do not** reimplement HTTP calls, URL building, or revision pinning by hand — let the SDK do it (`client.revision({ ..., revision: 'head' })` auto-resolves the head revision)
 - `revisium/migrations.json` — schema migrations (committed to git)
 - `npm run revisium:standalone` — start local Revisium (port 8888, embedded PG on 5441)
 - `npm run revisium:save-migrations` / `revisium:apply-migrations` — manage schema

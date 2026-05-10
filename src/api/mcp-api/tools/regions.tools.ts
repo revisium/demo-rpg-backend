@@ -23,7 +23,7 @@ export class RegionsTools implements McpToolRegistrar {
             .int()
             .min(1)
             .max(MAX_PAGE_SIZE)
-            .optional()
+            .default(MAX_PAGE_SIZE)
             .describe('Page size, default 100'),
           after: z.string().optional().describe('Cursor from a previous page (RegionEdge.cursor)'),
         },

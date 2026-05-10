@@ -61,6 +61,19 @@ describe('ListRegionsHandler', () => {
     expect(result).toEqual({ edges: [], totalCount: 0, pageInfo: { hasNextPage: false } });
   });
 
+  it('skips rows where node.data is null or non-object (defensive guard)', async () => {
+    const dictionary = mock<DictionaryApiService>();
+    const malformed = buildNode('null-data');
+    (malformed as unknown as { data: unknown }).data = null;
+    dictionary.getRegions.mockResolvedValue(buildConnection([buildNode('ok'), malformed], 2));
+
+    const handler = new ListRegionsHandler(dictionary);
+    const result = await handler.execute(new ListRegionsQuery({}));
+
+    expect(result.edges).toHaveLength(1);
+    expect(result.edges[0]!.node.id).toBe('ok');
+  });
+
   it('skips malformed rows (non-string climate, missing locale keys)', async () => {
     const dictionary = mock<DictionaryApiService>();
     dictionary.getRegions.mockResolvedValue(

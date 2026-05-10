@@ -46,7 +46,9 @@ export class ListRegionsHandler implements IQueryHandler<ListRegionsQuery> {
 }
 
 export function toRegionRow(node: RowModel): RegionRow | null {
-  const data = node.data;
+  const raw: unknown = node.data;
+  if (!raw || typeof raw !== 'object') return null;
+  const data = raw as { name?: unknown; description?: unknown; climate?: unknown };
   if (!isLocalized(data.name) || !isLocalized(data.description)) return null;
   if (!isClimate(data.climate)) return null;
   return {
