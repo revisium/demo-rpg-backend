@@ -42,12 +42,19 @@ export class DictionaryProxyService implements OnModuleInit {
     }
   }
 
-  async getRows(tableId: string, revisionId: string): Promise<unknown> {
+  async getRows(
+    tableId: string,
+    revisionId: string,
+    opts: { first?: number; skip?: number } = {},
+  ): Promise<unknown> {
     if (!this.apiUrl) return { edges: [] };
+
+    const params = new URLSearchParams({ first: String(opts.first ?? DEFAULT_PAGE_SIZE) });
+    if (opts.skip !== undefined) params.set('skip', String(opts.skip));
 
     try {
       const response = await fetch(
-        `${this.apiUrl}/api/revision/${revisionId}/tables/${tableId}/rows?first=100`,
+        `${this.apiUrl}/api/revision/${encodeURIComponent(revisionId)}/tables/${encodeURIComponent(tableId)}/rows?${params.toString()}`,
         { headers: { Authorization: `Bearer ${this.token}` } },
       );
 
@@ -68,7 +75,7 @@ export class DictionaryProxyService implements OnModuleInit {
 
     try {
       const response = await fetch(
-        `${this.apiUrl}/api/revision/${revisionId}/tables/${tableId}/rows/${rowId}`,
+        `${this.apiUrl}/api/revision/${encodeURIComponent(revisionId)}/tables/${encodeURIComponent(tableId)}/rows/${encodeURIComponent(rowId)}`,
         { headers: { Authorization: `Bearer ${this.token}` } },
       );
 
@@ -81,3 +88,5 @@ export class DictionaryProxyService implements OnModuleInit {
     }
   }
 }
+
+const DEFAULT_PAGE_SIZE = 100;

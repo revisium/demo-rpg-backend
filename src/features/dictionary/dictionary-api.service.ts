@@ -11,18 +11,18 @@ export class DictionaryApiService {
     private readonly config: ConfigService,
   ) {}
 
-  async getRows(tableId: string, revisionId: string) {
-    return this.proxy.getRows(tableId, revisionId);
+  async getRows(tableId: string, revisionId: string, opts: { first?: number; skip?: number } = {}) {
+    return this.proxy.getRows(tableId, revisionId, opts);
   }
 
   async getRow(tableId: string, rowId: string, revisionId: string) {
     return this.proxy.getRow(tableId, rowId, revisionId);
   }
 
-  async getRegions(_opts: { first?: number; skip?: number }) {
+  async getRegions(opts: { first?: number; skip?: number }) {
     const revisionId = this.dataRevisionId();
     if (!revisionId) return null;
-    return this.proxy.getRows('regions', revisionId);
+    return this.proxy.getRows('regions', revisionId, opts);
   }
 
   async getRegion(regionId: string) {

@@ -5,17 +5,17 @@ import { HttpAuthGuard } from 'src/features/auth/guards/http-auth.guard';
 import { HttpPermissionGuard } from 'src/features/auth/guards/http-permission.guard';
 import { PermissionParams } from 'src/features/auth/decorators/permission-params.decorator';
 import { PermissionAction, PermissionSubject } from 'src/features/auth/types';
+import { RegionClimate } from 'src/features/regions/queries/impl/list-regions.query';
 import { ListRegionsDto } from './dto/list-regions.dto';
 import { RegionResponseModel, RegionsListResponseModel } from './models/region-response.model';
 
 @ApiTags('regions')
-@UseGuards(HttpAuthGuard)
+@UseGuards(HttpAuthGuard, HttpPermissionGuard)
 @PermissionParams({ action: PermissionAction.read, subject: PermissionSubject.Region })
 @Controller('regions')
 export class RegionsController {
   constructor(private readonly regionsApi: RegionsApiService) {}
 
-  @UseGuards(HttpPermissionGuard)
   @Get()
   @ApiOperation({ summary: 'List Eldoria regions from demo-rpg-data' })
   @ApiResponse({ status: 200, type: RegionsListResponseModel })
@@ -30,7 +30,6 @@ export class RegionsController {
     };
   }
 
-  @UseGuards(HttpPermissionGuard)
   @Get(':regionId')
   @ApiOperation({ summary: 'Get a single Eldoria region' })
   @ApiResponse({ status: 200, type: RegionResponseModel })
@@ -49,7 +48,7 @@ function toRegion(
   data: {
     name: { en: string; ru: string; zh: string };
     description: { en: string; ru: string; zh: string };
-    climate: string;
+    climate: RegionClimate;
   },
 ): RegionResponseModel {
   return {

@@ -21,17 +21,24 @@ export class ListRegionsHandler implements IQueryHandler<ListRegionsQuery> {
       return { edges: [], totalCount: 0 };
     }
 
+    const edges = result.edges.filter(isRegionEdge).map((edge) => ({ node: edge.node }));
     return {
-      edges: result.edges.map((edge) => ({ node: edge.node })),
-      totalCount: result.totalCount ?? result.edges.length,
+      edges,
+      totalCount: result.totalCount ?? edges.length,
     };
   }
 }
 
-function isRegionsListResult(
-  value: unknown,
-): value is { edges: { node: RegionRow }[]; totalCount?: number } {
+function isRegionsListResult(value: unknown): value is { edges: unknown[]; totalCount?: number } {
   if (!value || typeof value !== 'object') return false;
   const v = value as { edges?: unknown };
   return Array.isArray(v.edges);
+}
+
+function isRegionEdge(edge: unknown): edge is { node: RegionRow } {
+  if (!edge || typeof edge !== 'object') return false;
+  const node = (edge as { node?: unknown }).node;
+  if (!node || typeof node !== 'object') return false;
+  const n = node as { id?: unknown; data?: unknown };
+  return typeof n.id === 'string' && typeof n.data === 'object' && n.data !== null;
 }

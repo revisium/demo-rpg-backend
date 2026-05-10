@@ -1,4 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import {
+  REGION_CLIMATES,
+  RegionClimate,
+} from 'src/features/regions/queries/impl/list-regions.query';
 
 export class LocalizedStringResponseModel {
   @ApiProperty()
@@ -21,8 +25,8 @@ export class RegionResponseModel {
   @ApiProperty({ type: LocalizedStringResponseModel })
   description!: LocalizedStringResponseModel;
 
-  @ApiProperty({ enum: ['temperate', 'alpine', 'coastal', 'desert', 'forest'] })
-  climate!: string;
+  @ApiProperty({ enum: REGION_CLIMATES })
+  climate!: RegionClimate;
 }
 
 export class RegionsListResponseModel {

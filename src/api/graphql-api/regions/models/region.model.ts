@@ -1,4 +1,5 @@
 import { ObjectType, Field } from '@nestjs/graphql';
+import { RegionClimate } from 'src/features/regions/queries/impl/list-regions.query';
 
 @ObjectType()
 export class LocalizedStringModel {
@@ -24,5 +25,5 @@ export class RegionModel {
   description!: LocalizedStringModel;
 
   @Field()
-  climate!: string;
+  climate!: RegionClimate;
 }

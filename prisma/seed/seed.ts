@@ -32,20 +32,24 @@ async function main() {
     await prisma.$connect();
 
     for (const roleData of Object.values(ROLES)) {
+      const permissionsCreate = roleData.permissions.map((p) => ({
+        action: p.action,
+        subject: p.subject,
+        condition: p.condition ? structuredClone(p.condition) : undefined,
+      }));
+
       await prisma.role.upsert({
         where: { id: roleData.id },
-        update: {},
+        update: {
+          name: roleData.name,
+          level: roleData.level,
+          permissions: { deleteMany: {}, create: permissionsCreate },
+        },
         create: {
           id: roleData.id,
           name: roleData.name,
           level: roleData.level,
-          permissions: {
-            create: roleData.permissions.map((p) => ({
-              action: p.action,
-              subject: p.subject,
-              condition: p.condition ? structuredClone(p.condition) : undefined,
-            })),
-          },
+          permissions: { create: permissionsCreate },
         },
       });
     }

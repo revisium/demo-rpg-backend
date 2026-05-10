@@ -7,11 +7,14 @@ export type ListRegionsQueryReturnType = {
   totalCount: number;
 };
 
+export const REGION_CLIMATES = ['temperate', 'alpine', 'coastal', 'desert', 'forest'] as const;
+export type RegionClimate = (typeof REGION_CLIMATES)[number];
+
 export interface RegionRow {
   id: string;
   data: {
     name: { en: string; ru: string; zh: string };
     description: { en: string; ru: string; zh: string };
-    climate: 'temperate' | 'alpine' | 'coastal' | 'desert' | 'forest';
+    climate: RegionClimate;
   };
 }

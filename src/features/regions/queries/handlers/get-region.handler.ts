@@ -25,5 +25,5 @@ export class GetRegionHandler implements IQueryHandler<GetRegionQuery> {
 function isRegionRow(value: unknown): value is RegionRow {
   if (!value || typeof value !== 'object') return false;
   const v = value as { id?: unknown; data?: unknown };
-  return typeof v.id === 'string' && typeof v.data === 'object';
+  return typeof v.id === 'string' && typeof v.data === 'object' && v.data !== null;
 }
