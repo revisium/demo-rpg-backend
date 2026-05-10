@@ -1,4 +1,12 @@
-import { Controller, Get, NotFoundException, Param, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  NotFoundException,
+  Param,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RegionsApiService } from 'src/features/regions/regions-api.service';
 import { HttpAuthGuard } from 'src/features/auth/guards/http-auth.guard';
@@ -18,7 +26,7 @@ export class RegionsController {
 
   @Get()
   @ApiOperation({ summary: 'List Eldoria regions from demo-rpg-data' })
-  @ApiResponse({ status: 200, type: RegionsListResponseModel })
+  @ApiResponse({ status: HttpStatus.OK, type: RegionsListResponseModel })
   async list(@Query() data: ListRegionsDto): Promise<RegionsListResponseModel> {
     const result = await this.regionsApi.listRegions({
       first: data.first,
@@ -32,8 +40,8 @@ export class RegionsController {
 
   @Get(':regionId')
   @ApiOperation({ summary: 'Get a single Eldoria region' })
-  @ApiResponse({ status: 200, type: RegionResponseModel })
-  @ApiResponse({ status: 404, description: 'Region not found' })
+  @ApiResponse({ status: HttpStatus.OK, type: RegionResponseModel })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Region not found' })
   async get(@Param('regionId') regionId: string): Promise<RegionResponseModel> {
     const row = await this.regionsApi.getRegion({ regionId });
     if (!row) {
