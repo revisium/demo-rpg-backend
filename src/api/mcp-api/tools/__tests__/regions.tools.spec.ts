@@ -46,21 +46,29 @@ describe('RegionsTools', () => {
 
   it('list_regions handler checks permission and returns serialized result', async () => {
     const api = mock<RegionsApiService>();
-    api.listRegions.mockResolvedValue({ edges: [], totalCount: 0 });
+    api.listRegions.mockResolvedValue({
+      edges: [],
+      totalCount: 0,
+      pageInfo: { hasNextPage: false },
+    });
     const auth = buildAuth();
     const server = buildServer();
 
     new RegionsTools(api).register(server, auth);
 
     const handler = findHandler(server, 'list_regions');
-    const result = await handler({ first: 5, skip: 0 });
+    const result = await handler({ first: 5, after: 'c-prev' });
 
     expect(auth.checkSystemPermission).toHaveBeenCalledWith([
       { action: 'read', subject: 'Region' },
     ]);
-    expect(api.listRegions).toHaveBeenCalledWith({ first: 5, skip: 0 });
+    expect(api.listRegions).toHaveBeenCalledWith({ first: 5, after: 'c-prev' });
     expect(result.content[0]!.type).toBe('text');
-    expect(JSON.parse(result.content[0]!.text)).toEqual({ edges: [], totalCount: 0 });
+    expect(JSON.parse(result.content[0]!.text)).toEqual({
+      edges: [],
+      totalCount: 0,
+      pageInfo: { hasNextPage: false },
+    });
   });
 
   it('get_region handler returns isError when row is missing', async () => {

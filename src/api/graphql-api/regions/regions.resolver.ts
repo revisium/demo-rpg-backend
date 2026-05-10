@@ -5,7 +5,10 @@ import { GqlAuthGuard } from 'src/features/auth/guards/gql-auth.guard';
 import { GqlPermissionGuard } from 'src/features/auth/guards/gql-permission.guard';
 import { PermissionParams } from 'src/features/auth/decorators/permission-params.decorator';
 import { PermissionAction, PermissionSubject } from 'src/features/auth/types';
-import { RegionClimate } from 'src/features/regions/queries/impl/list-regions.query';
+import {
+  LocalizedString,
+  RegionClimate,
+} from 'src/features/regions/queries/impl/list-regions.query';
 import { RegionModel } from './models/region.model';
 import { RegionsListModel } from './models/regions-list.model';
 import { ListRegionsInput } from './inputs/list-regions.input';
@@ -22,11 +25,18 @@ export class RegionsResolver {
   ): Promise<RegionsListModel> {
     const result = await this.regionsApi.listRegions({
       first: data?.first,
-      skip: data?.skip,
+      after: data?.after,
     });
     return {
-      edges: result.edges.map((edge) => toRegionModel(edge.node.id, edge.node.data)),
+      edges: result.edges.map((edge) => ({
+        cursor: edge.cursor,
+        node: toRegionModel(edge.node.id, edge.node.data),
+      })),
       totalCount: result.totalCount,
+      pageInfo: {
+        endCursor: result.pageInfo.endCursor,
+        hasNextPage: result.pageInfo.hasNextPage,
+      },
     };
   }
 
@@ -40,8 +50,8 @@ export class RegionsResolver {
 function toRegionModel(
   id: string,
   data: {
-    name: { en: string; ru: string; zh: string };
-    description: { en: string; ru: string; zh: string };
+    name: LocalizedString;
+    description: LocalizedString;
     climate: RegionClimate;
   },
 ): RegionModel {

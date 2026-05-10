@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { DictionaryApiService } from 'src/features/dictionary/dictionary-api.service';
 import { GetRegionQuery, GetRegionQueryReturnType } from '../impl/get-region.query';
-import { RegionRow } from '../impl/list-regions.query';
+import { toRegionRow } from './list-regions.handler';
 
 @QueryHandler(GetRegionQuery)
 export class GetRegionHandler implements IQueryHandler<GetRegionQuery> {
@@ -15,17 +15,11 @@ export class GetRegionHandler implements IQueryHandler<GetRegionQuery> {
 
     if (result === null) return null;
 
-    if (!isRegionRow(result)) {
-      this.logger.warn(`Dictionary returned an unexpected shape for region ${query.data.regionId}`);
+    const region = toRegionRow(result);
+    if (!region) {
+      this.logger.warn(`Region ${query.data.regionId} has malformed data; returning not-found`);
       return null;
     }
-
-    return result;
+    return region;
   }
-}
-
-function isRegionRow(value: unknown): value is RegionRow {
-  if (!value || typeof value !== 'object') return false;
-  const v = value as { id?: unknown; data?: unknown };
-  return typeof v.id === 'string' && typeof v.data === 'object' && v.data !== null;
 }
