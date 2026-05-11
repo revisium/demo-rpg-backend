@@ -25,6 +25,7 @@ COPY --from=builder /home/app/package*.json ./
 COPY --from=builder /home/app/dist/ ./dist/
 COPY --from=builder /home/app/node_modules/ ./node_modules/
 COPY --from=builder /home/app/prisma/ ./prisma/
+COPY --from=builder /home/app/prisma.config.ts ./
 COPY --from=builder /home/app/revisium/ ./revisium/
 
 RUN chown -R appuser:appuser /home/app
