@@ -27,3 +27,6 @@ jobs:
       kube_app_url: ${{ vars.KUBE_APP_URL }}
     secrets:
       KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+      KUBE_SERVICE_NAME: ${{ secrets.KUBE_SERVICE_NAME }}
+      KUBE_APP_URL: ${{ secrets.KUBE_APP_URL }}
