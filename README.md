@@ -44,7 +44,7 @@ The project passport, ADRs, and shared spec live in [`revisium/demo-rpg-docs`](h
 
 Revisium exposes each project under stable URL patterns. The bits that matter for this repo:
 
-```
+```text
 https://cloud.revisium.io
 ├── /revisium/demo-rpg-data                                     ← Admin UI
 └── /endpoint
@@ -60,7 +60,7 @@ The `master/head` segment pins the URL to the committed head revision of the `ma
 
 ### Runtime read path
 
-```
+```text
    regions GraphQL query
       │
       ▼
@@ -83,7 +83,7 @@ The base URL is injected once at module init in [`dictionary-api.service.ts`](sr
 
 ### Schema-change path (write to Revisium)
 
-```
+```text
 local: developer edits schema in Admin UI
                   │
                   ▼
