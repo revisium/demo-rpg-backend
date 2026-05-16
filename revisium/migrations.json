@@ -10,9 +10,18 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
@@ -25,9 +34,18 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         }
@@ -44,14 +62,26 @@
       "type": "object",
       "required": ["name", "description", "code"],
       "properties": {
-        "code": { "type": "string", "default": "" },
+        "code": {
+          "type": "string",
+          "default": ""
+        },
         "name": {
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
@@ -59,9 +89,18 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         }
@@ -78,14 +117,26 @@
       "type": "object",
       "required": ["code", "name", "abbreviation", "description"],
       "properties": {
-        "code": { "type": "string", "default": "" },
+        "code": {
+          "type": "string",
+          "default": ""
+        },
         "name": {
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
@@ -93,13 +144,25 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
-        "abbreviation": { "type": "string", "default": "" }
+        "abbreviation": {
+          "type": "string",
+          "default": ""
+        }
       },
       "additionalProperties": false
     },
@@ -113,7 +176,10 @@
       "type": "object",
       "required": ["code", "name", "description", "kind", "default_duration"],
       "properties": {
-        "code": { "type": "string", "default": "" },
+        "code": {
+          "type": "string",
+          "default": ""
+        },
         "kind": {
           "enum": ["buff", "debuff", "damage_over_time", "crowd_control"],
           "type": "string",
@@ -123,9 +189,18 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
@@ -133,13 +208,25 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
-        "default_duration": { "type": "number", "default": 0 }
+        "default_duration": {
+          "type": "number",
+          "default": 0
+        }
       },
       "additionalProperties": false
     },
@@ -157,13 +244,24 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
-        "crest": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
+        "crest": {
+          "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0"
+        },
         "alignment": {
           "enum": ["lawful_good", "lawful_neutral", "neutral", "chaotic_neutral", "chaotic_evil"],
           "type": "string",
@@ -173,9 +271,18 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         }
@@ -203,7 +310,9 @@
         "effects"
       ],
       "properties": {
-        "icon": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
+        "icon": {
+          "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0"
+        },
         "kind": {
           "enum": ["active", "passive", "reaction"],
           "type": "string",
@@ -213,9 +322,18 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
@@ -239,27 +357,58 @@
             "type": "object",
             "required": ["effect_id", "chance", "duration"],
             "properties": {
-              "chance": { "type": "number", "default": 0 },
-              "duration": { "type": "number", "default": 0 },
-              "effect_id": { "type": "string", "default": "", "foreignKey": "effects" }
+              "chance": {
+                "type": "number",
+                "default": 0
+              },
+              "duration": {
+                "type": "number",
+                "default": 0
+              },
+              "effect_id": {
+                "type": "string",
+                "default": "",
+                "foreignKey": "effects"
+              }
             },
             "additionalProperties": false
           }
         },
-        "cooldown": { "type": "number", "default": 0 },
-        "base_damage": { "type": "number", "default": 0 },
+        "cooldown": {
+          "type": "number",
+          "default": 0
+        },
+        "base_damage": {
+          "type": "number",
+          "default": 0
+        },
         "description": {
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
-        "damage_scaling": { "type": "number", "default": 0 },
-        "level_required": { "type": "number", "default": 1 }
+        "damage_scaling": {
+          "type": "number",
+          "default": 0
+        },
+        "level_required": {
+          "type": "number",
+          "default": 1
+        }
       },
       "additionalProperties": false
     },
@@ -273,7 +422,9 @@
       "type": "object",
       "required": ["region_id", "name", "description", "map", "kind", "coordinates"],
       "properties": {
-        "map": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
+        "map": {
+          "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0"
+        },
         "kind": {
           "enum": ["town", "village", "dungeon", "ruin", "wilderness"],
           "type": "string",
@@ -283,19 +434,38 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
-        "region_id": { "type": "string", "default": "", "foreignKey": "regions" },
+        "region_id": {
+          "type": "string",
+          "default": "",
+          "foreignKey": "regions"
+        },
         "coordinates": {
           "type": "object",
           "required": ["x", "y"],
           "properties": {
-            "x": { "type": "number", "default": 0 },
-            "y": { "type": "number", "default": 0 }
+            "x": {
+              "type": "number",
+              "default": 0
+            },
+            "y": {
+              "type": "number",
+              "default": 0
+            }
           },
           "additionalProperties": false
         },
@@ -303,9 +473,18 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         }
@@ -334,25 +513,52 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
-        "base_hp": { "type": "number", "default": 0 },
+        "base_hp": {
+          "type": "number",
+          "default": 0
+        },
         "description": {
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
-        "hp_per_level": { "type": "number", "default": 0 },
-        "mp_per_level": { "type": "number", "default": 0 },
+        "hp_per_level": {
+          "type": "number",
+          "default": 0
+        },
+        "mp_per_level": {
+          "type": "number",
+          "default": 0
+        },
         "primary_stat": {
           "enum": ["strength", "dexterity", "intelligence", "wisdom", "constitution", "charisma"],
           "type": "string",
@@ -360,7 +566,11 @@
         },
         "starting_ability_ids": {
           "type": "array",
-          "items": { "type": "string", "default": "", "foreignKey": "abilities" }
+          "items": {
+            "type": "string",
+            "default": "",
+            "foreignKey": "abilities"
+          }
         }
       },
       "additionalProperties": false
@@ -387,14 +597,25 @@
         "rarity_tag"
       ],
       "properties": {
-        "icon": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
+        "icon": {
+          "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0"
+        },
         "name": {
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
@@ -403,21 +624,38 @@
           "type": "string",
           "default": "common"
         },
-        "weight": { "type": "number", "default": 0 },
-        "type_id": { "type": "string", "default": "", "foreignKey": "item_types" },
+        "weight": {
+          "type": "number",
+          "default": 0
+        },
+        "type_id": {
+          "type": "string",
+          "default": "",
+          "foreignKey": "item_types"
+        },
         "modifiers": {
           "type": "array",
           "items": {
             "type": "object",
             "required": ["stat_id", "value"],
             "properties": {
-              "value": { "type": "number", "default": 0 },
-              "stat_id": { "type": "string", "default": "", "foreignKey": "stats" }
+              "value": {
+                "type": "number",
+                "default": 0
+              },
+              "stat_id": {
+                "type": "string",
+                "default": "",
+                "foreignKey": "stats"
+              }
             },
             "additionalProperties": false
           }
         },
-        "base_value": { "type": "number", "default": 0 },
+        "base_value": {
+          "type": "number",
+          "default": 0
+        },
         "rarity_tag": {
           "type": "string",
           "default": "common-tier",
@@ -431,9 +669,18 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
@@ -441,9 +688,15 @@
           "type": "number",
           "default": 0,
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "base_value * rarity_multiplier" }
+          "x-formula": {
+            "version": 1,
+            "expression": "base_value * rarity_multiplier"
+          }
         },
-        "rarity_multiplier": { "type": "number", "default": 1 }
+        "rarity_multiplier": {
+          "type": "number",
+          "default": 1
+        }
       },
       "additionalProperties": false
     },
@@ -471,9 +724,18 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
@@ -486,34 +748,69 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
-        "portrait": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
-        "faction_id": { "type": "string", "default": "", "foreignKey": "factions" },
+        "portrait": {
+          "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0"
+        },
+        "faction_id": {
+          "type": "string",
+          "default": "",
+          "foreignKey": "factions"
+        },
         "description": {
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
-        "location_id": { "type": "string", "default": "", "foreignKey": "locations" },
+        "location_id": {
+          "type": "string",
+          "default": "",
+          "foreignKey": "locations"
+        },
         "display_label_en": {
           "type": "string",
           "default": "",
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "concat(title.en, \" \", name.en)" }
+          "x-formula": {
+            "version": 1,
+            "expression": "concat(title.en, \" \", name.en)"
+          }
         },
         "inventory_item_ids": {
           "type": "array",
-          "items": { "type": "string", "default": "", "foreignKey": "items" }
+          "items": {
+            "type": "string",
+            "default": "",
+            "foreignKey": "items"
+          }
         }
       },
       "additionalProperties": false
@@ -542,7 +839,10 @@
         "drop_count"
       ],
       "properties": {
-        "hp": { "type": "number", "default": 0 },
+        "hp": {
+          "type": "number",
+          "default": 0
+        },
         "kind": {
           "enum": ["beast", "humanoid", "undead", "aberration", "construct"],
           "type": "string",
@@ -552,9 +852,18 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
@@ -564,35 +873,76 @@
             "type": "object",
             "required": ["item_id", "chance", "quantity_min", "quantity_max"],
             "properties": {
-              "chance": { "type": "number", "default": 0 },
-              "item_id": { "type": "string", "default": "", "foreignKey": "items" },
-              "quantity_max": { "type": "number", "default": 0 },
-              "quantity_min": { "type": "number", "default": 0 }
+              "chance": {
+                "type": "number",
+                "default": 0
+              },
+              "item_id": {
+                "type": "string",
+                "default": "",
+                "foreignKey": "items"
+              },
+              "quantity_max": {
+                "type": "number",
+                "default": 0
+              },
+              "quantity_min": {
+                "type": "number",
+                "default": 0
+              }
             },
             "additionalProperties": false
           }
         },
-        "image": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
-        "level": { "type": "number", "default": 1 },
+        "image": {
+          "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0"
+        },
+        "level": {
+          "type": "number",
+          "default": 1
+        },
         "drop_count": {
           "type": "number",
           "default": 0,
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "count(drops)" }
+          "x-formula": {
+            "version": 1,
+            "expression": "count(drops)"
+          }
         },
-        "faction_id": { "type": "string", "default": "", "foreignKey": "factions" },
+        "faction_id": {
+          "type": "string",
+          "default": "",
+          "foreignKey": "factions"
+        },
         "ability_ids": {
           "type": "array",
-          "items": { "type": "string", "default": "", "foreignKey": "abilities" }
+          "items": {
+            "type": "string",
+            "default": "",
+            "foreignKey": "abilities"
+          }
         },
-        "base_damage": { "type": "number", "default": 0 },
+        "base_damage": {
+          "type": "number",
+          "default": 0
+        },
         "description": {
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
@@ -600,13 +950,19 @@
           "type": "number",
           "default": 0,
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "avg(drops[*].chance)" }
+          "x-formula": {
+            "version": 1,
+            "expression": "avg(drops[*].chance)"
+          }
         },
         "max_drop_quantity": {
           "type": "number",
           "default": 0,
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "max(drops[*].quantity_max)" }
+          "x-formula": {
+            "version": 1,
+            "expression": "max(drops[*].quantity_max)"
+          }
         }
       },
       "additionalProperties": false
@@ -636,30 +992,60 @@
         "display_name_en"
       ],
       "properties": {
-        "gold": { "type": "number", "default": 0 },
+        "gold": {
+          "type": "number",
+          "default": 0
+        },
         "name": {
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
-        "level": { "type": "number", "default": 1 },
+        "level": {
+          "type": "number",
+          "default": 1
+        },
         "epithet": {
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
-        "class_id": { "type": "string", "default": "", "foreignKey": "classes" },
-        "portrait": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
+        "class_id": {
+          "type": "string",
+          "default": "",
+          "foreignKey": "classes"
+        },
+        "portrait": {
+          "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0"
+        },
         "equipment": {
           "type": "array",
           "items": {
@@ -680,8 +1066,15 @@
                 "type": "string",
                 "default": "main_hand"
               },
-              "item_id": { "type": "string", "default": "", "foreignKey": "items" },
-              "modifier": { "type": "number", "default": 0 }
+              "item_id": {
+                "type": "string",
+                "default": "",
+                "foreignKey": "items"
+              },
+              "modifier": {
+                "type": "number",
+                "default": 0
+              }
             },
             "additionalProperties": false
           }
@@ -690,34 +1083,57 @@
           "type": "boolean",
           "default": false,
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "level >= 10" }
+          "x-formula": {
+            "version": 1,
+            "expression": "level >= 10"
+          }
         },
         "ability_ids": {
           "type": "array",
-          "items": { "type": "string", "default": "", "foreignKey": "abilities" }
+          "items": {
+            "type": "string",
+            "default": "",
+            "foreignKey": "abilities"
+          }
         },
-        "constitution": { "type": "number", "default": 10 },
+        "constitution": {
+          "type": "number",
+          "default": 10
+        },
         "equipped_count": {
           "type": "number",
           "default": 0,
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "count(equipment)" }
+          "x-formula": {
+            "version": 1,
+            "expression": "count(equipment)"
+          }
         },
         "display_name_en": {
           "type": "string",
           "default": "",
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "concat(name.en, \" \", epithet.en)" }
+          "x-formula": {
+            "version": 1,
+            "expression": "concat(name.en, \" \", epithet.en)"
+          }
         },
         "inventory_item_ids": {
           "type": "array",
-          "items": { "type": "string", "default": "", "foreignKey": "items" }
+          "items": {
+            "type": "string",
+            "default": "",
+            "foreignKey": "items"
+          }
         },
         "total_equipment_modifier": {
           "type": "number",
           "default": 0,
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "sum(equipment[*].modifier)" }
+          "x-formula": {
+            "version": 1,
+            "expression": "sum(equipment[*].modifier)"
+          }
         }
       },
       "additionalProperties": false
@@ -728,7 +1144,12 @@
   {
     "id": "2026-05-09T05:41:40.511Z",
     "hash": "13916c8b00bdd3bc9845225db80a34c0a0b5cf37",
-    "patches": [{ "op": "remove", "path": "/properties/max_drop_quantity" }],
+    "patches": [
+      {
+        "op": "remove",
+        "path": "/properties/max_drop_quantity"
+      }
+    ],
     "tableId": "monsters",
     "changeType": "update"
   },
@@ -743,9 +1164,18 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
@@ -753,9 +1183,18 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
@@ -763,11 +1202,18 @@
           "type": "boolean",
           "default": false,
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "count(hero_ids) >= 4" }
+          "x-formula": {
+            "version": 1,
+            "expression": "count(hero_ids) >= 4"
+          }
         },
         "hero_ids": {
           "type": "array",
-          "items": { "type": "string", "default": "", "foreignKey": "heroes" }
+          "items": {
+            "type": "string",
+            "default": "",
+            "foreignKey": "heroes"
+          }
         },
         "formation": {
           "enum": ["vanguard", "balanced", "defensive", "skirmisher"],
@@ -778,7 +1224,10 @@
           "type": "number",
           "default": 0,
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "count(hero_ids)" }
+          "x-formula": {
+            "version": 1,
+            "expression": "count(hero_ids)"
+          }
         }
       },
       "additionalProperties": false
@@ -805,7 +1254,9 @@
         "step_count"
       ],
       "properties": {
-        "map": { "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0" },
+        "map": {
+          "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0"
+        },
         "kind": {
           "enum": ["tutorial", "side", "story", "endgame"],
           "type": "string",
@@ -815,9 +1266,18 @@
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
@@ -827,17 +1287,34 @@
             "type": "object",
             "required": ["step_number", "description", "location_id", "npc_id", "xp", "rewards"],
             "properties": {
-              "xp": { "type": "number", "default": 0 },
-              "npc_id": { "type": "string", "default": "", "foreignKey": "npcs" },
+              "xp": {
+                "type": "number",
+                "default": 0
+              },
+              "npc_id": {
+                "type": "string",
+                "default": "",
+                "foreignKey": "npcs"
+              },
               "rewards": {
                 "type": "array",
                 "items": {
                   "type": "object",
                   "required": ["item_id", "quantity", "bonus_xp"],
                   "properties": {
-                    "item_id": { "type": "string", "default": "", "foreignKey": "items" },
-                    "bonus_xp": { "type": "number", "default": 0 },
-                    "quantity": { "type": "number", "default": 0 }
+                    "item_id": {
+                      "type": "string",
+                      "default": "",
+                      "foreignKey": "items"
+                    },
+                    "bonus_xp": {
+                      "type": "number",
+                      "default": 0
+                    },
+                    "quantity": {
+                      "type": "number",
+                      "default": 0
+                    }
                   },
                   "additionalProperties": false
                 }
@@ -846,14 +1323,30 @@
                 "type": "object",
                 "required": ["en"],
                 "properties": {
-                  "ch": { "type": "string", "default": "" },
-                  "en": { "type": "string", "default": "" },
-                  "ru": { "type": "string", "default": "" }
+                  "ch": {
+                    "type": "string",
+                    "default": ""
+                  },
+                  "en": {
+                    "type": "string",
+                    "default": ""
+                  },
+                  "ru": {
+                    "type": "string",
+                    "default": ""
+                  }
                 },
                 "additionalProperties": false
               },
-              "location_id": { "type": "string", "default": "", "foreignKey": "locations" },
-              "step_number": { "type": "number", "default": 0 }
+              "location_id": {
+                "type": "string",
+                "default": "",
+                "foreignKey": "locations"
+              },
+              "step_number": {
+                "type": "number",
+                "default": 0
+              }
             },
             "additionalProperties": false
           }
@@ -862,33 +1355,61 @@
           "type": "number",
           "default": 0,
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "sum(steps[*].xp)" }
+          "x-formula": {
+            "version": 1,
+            "expression": "sum(steps[*].xp)"
+          }
         },
         "step_count": {
           "type": "number",
           "default": 0,
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "count(steps)" }
+          "x-formula": {
+            "version": 1,
+            "expression": "count(steps)"
+          }
         },
         "description": {
           "type": "object",
           "required": ["en"],
           "properties": {
-            "ch": { "type": "string", "default": "" },
-            "en": { "type": "string", "default": "" },
-            "ru": { "type": "string", "default": "" }
+            "ch": {
+              "type": "string",
+              "default": ""
+            },
+            "en": {
+              "type": "string",
+              "default": ""
+            },
+            "ru": {
+              "type": "string",
+              "default": ""
+            }
           },
           "additionalProperties": false
         },
-        "giver_npc_id": { "type": "string", "default": "", "foreignKey": "npcs" },
-        "is_repeatable": { "type": "boolean", "default": false },
+        "giver_npc_id": {
+          "type": "string",
+          "default": "",
+          "foreignKey": "npcs"
+        },
+        "is_repeatable": {
+          "type": "boolean",
+          "default": false
+        },
         "total_loot_xp": {
           "type": "number",
           "default": 0,
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "sum(steps[*].rewards[*].bonus_xp)" }
+          "x-formula": {
+            "version": 1,
+            "expression": "sum(steps[*].rewards[*].bonus_xp)"
+          }
         },
-        "level_required": { "type": "number", "default": 1 }
+        "level_required": {
+          "type": "number",
+          "default": 1
+        }
       },
       "additionalProperties": false
     },
@@ -902,7 +1423,10 @@
       "type": "object",
       "required": ["npc_id", "slug", "lines", "line_count"],
       "properties": {
-        "slug": { "type": "string", "default": "" },
+        "slug": {
+          "type": "string",
+          "default": ""
+        },
         "lines": {
           "type": "array",
           "items": {
@@ -913,9 +1437,18 @@
                 "type": "object",
                 "required": ["en"],
                 "properties": {
-                  "ch": { "type": "string", "default": "" },
-                  "en": { "type": "string", "default": "" },
-                  "ru": { "type": "string", "default": "" }
+                  "ch": {
+                    "type": "string",
+                    "default": ""
+                  },
+                  "en": {
+                    "type": "string",
+                    "default": ""
+                  },
+                  "ru": {
+                    "type": "string",
+                    "default": ""
+                  }
                 },
                 "additionalProperties": false
               },
@@ -933,12 +1466,19 @@
             "additionalProperties": false
           }
         },
-        "npc_id": { "type": "string", "default": "", "foreignKey": "npcs" },
+        "npc_id": {
+          "type": "string",
+          "default": "",
+          "foreignKey": "npcs"
+        },
         "line_count": {
           "type": "number",
           "default": 0,
           "readOnly": true,
-          "x-formula": { "version": 1, "expression": "count(lines)" }
+          "x-formula": {
+            "version": 1,
+            "expression": "count(lines)"
+          }
         }
       },
       "additionalProperties": false
@@ -950,8 +1490,16 @@
     "id": "2026-05-09T07:00:40.871Z",
     "hash": "ab559b7ae841b0461716565368894611563217f4",
     "patches": [
-      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
-      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/name/properties/ch",
+        "path": "/properties/name/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/description/properties/ch",
+        "path": "/properties/description/properties/zh"
+      }
     ],
     "tableId": "regions",
     "changeType": "update"
@@ -960,8 +1508,16 @@
     "id": "2026-05-09T07:03:01.040Z",
     "hash": "2ac30d7ed2f6405637e6a853d93684777f9d3f6b",
     "patches": [
-      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
-      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/name/properties/ch",
+        "path": "/properties/name/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/description/properties/ch",
+        "path": "/properties/description/properties/zh"
+      }
     ],
     "tableId": "item_types",
     "changeType": "update"
@@ -970,8 +1526,16 @@
     "id": "2026-05-09T07:03:02.179Z",
     "hash": "24f5d67108575186bda142d1dd828ebd26777fef",
     "patches": [
-      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
-      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/name/properties/ch",
+        "path": "/properties/name/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/description/properties/ch",
+        "path": "/properties/description/properties/zh"
+      }
     ],
     "tableId": "stats",
     "changeType": "update"
@@ -980,8 +1544,16 @@
     "id": "2026-05-09T07:03:03.326Z",
     "hash": "0f1679898bb84773ee38cbf73c8bb86a03c92f05",
     "patches": [
-      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
-      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/name/properties/ch",
+        "path": "/properties/name/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/description/properties/ch",
+        "path": "/properties/description/properties/zh"
+      }
     ],
     "tableId": "effects",
     "changeType": "update"
@@ -990,8 +1562,16 @@
     "id": "2026-05-09T07:03:04.365Z",
     "hash": "e8ef10280030f735505c0717bbf2dff441cd574e",
     "patches": [
-      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
-      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/name/properties/ch",
+        "path": "/properties/name/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/description/properties/ch",
+        "path": "/properties/description/properties/zh"
+      }
     ],
     "tableId": "factions",
     "changeType": "update"
@@ -1000,8 +1580,16 @@
     "id": "2026-05-09T07:05:58.081Z",
     "hash": "15e77b960937643bfad24861fc5d25e9cb90c62a",
     "patches": [
-      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
-      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/name/properties/ch",
+        "path": "/properties/name/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/description/properties/ch",
+        "path": "/properties/description/properties/zh"
+      }
     ],
     "tableId": "abilities",
     "changeType": "update"
@@ -1010,8 +1598,16 @@
     "id": "2026-05-09T07:05:59.141Z",
     "hash": "4c16832d4be1561f8e09de88138a61da43c99bc8",
     "patches": [
-      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
-      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/name/properties/ch",
+        "path": "/properties/name/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/description/properties/ch",
+        "path": "/properties/description/properties/zh"
+      }
     ],
     "tableId": "locations",
     "changeType": "update"
@@ -1020,8 +1616,16 @@
     "id": "2026-05-09T07:06:00.576Z",
     "hash": "bc05d867ad661f34119d416fcb9432ee584dcbba",
     "patches": [
-      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
-      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/name/properties/ch",
+        "path": "/properties/name/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/description/properties/ch",
+        "path": "/properties/description/properties/zh"
+      }
     ],
     "tableId": "classes",
     "changeType": "update"
@@ -1030,8 +1634,16 @@
     "id": "2026-05-09T07:06:01.611Z",
     "hash": "f48d87a1e2a13c0b4b3d7e51467977e4d1743f1b",
     "patches": [
-      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
-      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/name/properties/ch",
+        "path": "/properties/name/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/description/properties/ch",
+        "path": "/properties/description/properties/zh"
+      }
     ],
     "tableId": "items",
     "changeType": "update"
@@ -1040,9 +1652,21 @@
     "id": "2026-05-09T07:07:55.585Z",
     "hash": "94951f0a19b7219cafed045fd64514f0bdad7cd7",
     "patches": [
-      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
-      { "op": "move", "from": "/properties/title/properties/ch", "path": "/properties/title/properties/zh" },
-      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/name/properties/ch",
+        "path": "/properties/name/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/title/properties/ch",
+        "path": "/properties/title/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/description/properties/ch",
+        "path": "/properties/description/properties/zh"
+      }
     ],
     "tableId": "npcs",
     "changeType": "update"
@@ -1051,8 +1675,16 @@
     "id": "2026-05-09T07:07:56.852Z",
     "hash": "ae35d2d68a9234639ae2df43853638b58d2925a2",
     "patches": [
-      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
-      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/name/properties/ch",
+        "path": "/properties/name/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/description/properties/ch",
+        "path": "/properties/description/properties/zh"
+      }
     ],
     "tableId": "monsters",
     "changeType": "update"
@@ -1061,8 +1693,16 @@
     "id": "2026-05-09T07:07:57.971Z",
     "hash": "d8f1ba30fc9efc11216bb9b617e5a8b502b51734",
     "patches": [
-      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
-      { "op": "move", "from": "/properties/epithet/properties/ch", "path": "/properties/epithet/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/name/properties/ch",
+        "path": "/properties/name/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/epithet/properties/ch",
+        "path": "/properties/epithet/properties/zh"
+      }
     ],
     "tableId": "heroes",
     "changeType": "update"
@@ -1071,8 +1711,16 @@
     "id": "2026-05-09T07:07:58.916Z",
     "hash": "789eb4ebaa15864af18b554ba8c1864b77028f8e",
     "patches": [
-      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
-      { "op": "move", "from": "/properties/motto/properties/ch", "path": "/properties/motto/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/name/properties/ch",
+        "path": "/properties/name/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/motto/properties/ch",
+        "path": "/properties/motto/properties/zh"
+      }
     ],
     "tableId": "parties",
     "changeType": "update"
@@ -1081,9 +1729,21 @@
     "id": "2026-05-09T07:09:45.829Z",
     "hash": "8a249b5424269e7c61d887185dac5559e2815eae",
     "patches": [
-      { "op": "move", "from": "/properties/name/properties/ch", "path": "/properties/name/properties/zh" },
-      { "op": "move", "from": "/properties/description/properties/ch", "path": "/properties/description/properties/zh" },
-      { "op": "move", "from": "/properties/steps/items/properties/description/properties/ch", "path": "/properties/steps/items/properties/description/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/name/properties/ch",
+        "path": "/properties/name/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/description/properties/ch",
+        "path": "/properties/description/properties/zh"
+      },
+      {
+        "op": "move",
+        "from": "/properties/steps/items/properties/description/properties/ch",
+        "path": "/properties/steps/items/properties/description/properties/zh"
+      }
     ],
     "tableId": "quests",
     "changeType": "update"
@@ -1092,9 +1752,468 @@
     "id": "2026-05-09T07:09:46.788Z",
     "hash": "f32461e6e7afd83b4dd145146679c1e45b50147d",
     "patches": [
-      { "op": "move", "from": "/properties/lines/items/properties/text/properties/ch", "path": "/properties/lines/items/properties/text/properties/zh" }
+      {
+        "op": "move",
+        "from": "/properties/lines/items/properties/text/properties/ch",
+        "path": "/properties/lines/items/properties/text/properties/zh"
+      }
     ],
     "tableId": "dialogs",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-16T08:17:58.851Z",
+    "hash": "cc48beb3d264784662b1fe4b83762571c1a9a06f",
+    "patches": [
+      {
+        "op": "replace",
+        "path": "",
+        "value": {
+          "type": "object",
+          "required": ["climate", "cover_image", "description", "name"],
+          "properties": {
+            "name": {
+              "type": "object",
+              "required": ["en", "ru", "zh"],
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "default": ""
+                },
+                "ru": {
+                  "type": "string",
+                  "default": ""
+                },
+                "zh": {
+                  "type": "string",
+                  "default": ""
+                }
+              },
+              "additionalProperties": false
+            },
+            "climate": {
+              "enum": ["temperate", "alpine", "coastal", "desert", "forest"],
+              "type": "string",
+              "default": ""
+            },
+            "cover_image": {
+              "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0"
+            },
+            "description": {
+              "type": "object",
+              "required": ["en", "ru", "zh"],
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "default": ""
+                },
+                "ru": {
+                  "type": "string",
+                  "default": ""
+                },
+                "zh": {
+                  "type": "string",
+                  "default": ""
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ],
+    "tableId": "regions",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-16T08:18:06.187Z",
+    "hash": "55377989d9f6814c92e2711eb1f8dc52e7f7c492",
+    "patches": [
+      {
+        "op": "replace",
+        "path": "",
+        "value": {
+          "type": "object",
+          "required": [
+            "base_hp",
+            "description",
+            "hp_per_level",
+            "icon",
+            "mp_per_level",
+            "name",
+            "primary_stat",
+            "starting_ability_ids"
+          ],
+          "properties": {
+            "icon": {
+              "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0"
+            },
+            "name": {
+              "type": "object",
+              "required": ["en", "ru", "zh"],
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "default": ""
+                },
+                "ru": {
+                  "type": "string",
+                  "default": ""
+                },
+                "zh": {
+                  "type": "string",
+                  "default": ""
+                }
+              },
+              "additionalProperties": false
+            },
+            "base_hp": {
+              "type": "number",
+              "default": 0
+            },
+            "description": {
+              "type": "object",
+              "required": ["en", "ru", "zh"],
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "default": ""
+                },
+                "ru": {
+                  "type": "string",
+                  "default": ""
+                },
+                "zh": {
+                  "type": "string",
+                  "default": ""
+                }
+              },
+              "additionalProperties": false
+            },
+            "hp_per_level": {
+              "type": "number",
+              "default": 0
+            },
+            "mp_per_level": {
+              "type": "number",
+              "default": 0
+            },
+            "primary_stat": {
+              "enum": [
+                "strength",
+                "dexterity",
+                "intelligence",
+                "wisdom",
+                "constitution",
+                "charisma"
+              ],
+              "type": "string",
+              "default": ""
+            },
+            "starting_ability_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "default": "",
+                "foreignKey": "abilities"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ],
+    "tableId": "classes",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-16T08:18:13.138Z",
+    "hash": "1a5522c13592361ee8e26ca9cc3588fb925c2573",
+    "patches": [
+      {
+        "op": "replace",
+        "path": "",
+        "value": {
+          "type": "object",
+          "required": ["coordinates", "description", "gallery", "kind", "map", "name", "region_id"],
+          "properties": {
+            "map": {
+              "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0"
+            },
+            "kind": {
+              "enum": ["town", "village", "dungeon", "ruin", "wilderness"],
+              "type": "string",
+              "default": ""
+            },
+            "name": {
+              "type": "object",
+              "required": ["en", "ru", "zh"],
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "default": ""
+                },
+                "ru": {
+                  "type": "string",
+                  "default": ""
+                },
+                "zh": {
+                  "type": "string",
+                  "default": ""
+                }
+              },
+              "additionalProperties": false
+            },
+            "gallery": {
+              "type": "array",
+              "items": {
+                "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0"
+              }
+            },
+            "region_id": {
+              "type": "string",
+              "default": "",
+              "foreignKey": "regions"
+            },
+            "coordinates": {
+              "type": "object",
+              "required": ["x", "y"],
+              "properties": {
+                "x": {
+                  "type": "number",
+                  "default": 0
+                },
+                "y": {
+                  "type": "number",
+                  "default": 0
+                }
+              },
+              "additionalProperties": false
+            },
+            "description": {
+              "type": "object",
+              "required": ["en", "ru", "zh"],
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "default": ""
+                },
+                "ru": {
+                  "type": "string",
+                  "default": ""
+                },
+                "zh": {
+                  "type": "string",
+                  "default": ""
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ],
+    "tableId": "locations",
+    "changeType": "update"
+  },
+  {
+    "id": "2026-05-16T08:18:24.427Z",
+    "hash": "d343fec8e2b2ca5cfed310b028c621394b30419c",
+    "patches": [
+      {
+        "op": "replace",
+        "path": "",
+        "value": {
+          "type": "object",
+          "required": [
+            "description",
+            "giver_npc_id",
+            "is_repeatable",
+            "kind",
+            "level_required",
+            "map",
+            "name",
+            "step_count",
+            "steps",
+            "total_loot_xp",
+            "total_xp"
+          ],
+          "properties": {
+            "map": {
+              "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0"
+            },
+            "kind": {
+              "enum": ["tutorial", "side", "story", "endgame"],
+              "type": "string",
+              "default": ""
+            },
+            "name": {
+              "type": "object",
+              "required": ["en", "ru", "zh"],
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "default": ""
+                },
+                "ru": {
+                  "type": "string",
+                  "default": ""
+                },
+                "zh": {
+                  "type": "string",
+                  "default": ""
+                }
+              },
+              "additionalProperties": false
+            },
+            "steps": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "image",
+                  "location_id",
+                  "npc_id",
+                  "rewards",
+                  "step_number",
+                  "xp"
+                ],
+                "properties": {
+                  "xp": {
+                    "type": "number",
+                    "default": 0
+                  },
+                  "image": {
+                    "$ref": "urn:jsonschema:io:revisium:file-schema:1.0.0"
+                  },
+                  "npc_id": {
+                    "type": "string",
+                    "default": "",
+                    "foreignKey": "npcs"
+                  },
+                  "rewards": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["bonus_xp", "item_id", "quantity"],
+                      "properties": {
+                        "item_id": {
+                          "type": "string",
+                          "default": "",
+                          "foreignKey": "items"
+                        },
+                        "bonus_xp": {
+                          "type": "number",
+                          "default": 0
+                        },
+                        "quantity": {
+                          "type": "number",
+                          "default": 0
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "description": {
+                    "type": "object",
+                    "required": ["en", "ru", "zh"],
+                    "properties": {
+                      "en": {
+                        "type": "string",
+                        "default": ""
+                      },
+                      "ru": {
+                        "type": "string",
+                        "default": ""
+                      },
+                      "zh": {
+                        "type": "string",
+                        "default": ""
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "location_id": {
+                    "type": "string",
+                    "default": "",
+                    "foreignKey": "locations"
+                  },
+                  "step_number": {
+                    "type": "number",
+                    "default": 0
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "total_xp": {
+              "type": "number",
+              "default": 0,
+              "readOnly": true,
+              "x-formula": {
+                "version": 1,
+                "expression": "sum(steps[*].xp)"
+              }
+            },
+            "step_count": {
+              "type": "number",
+              "default": 0,
+              "readOnly": true,
+              "x-formula": {
+                "version": 1,
+                "expression": "count(steps)"
+              }
+            },
+            "description": {
+              "type": "object",
+              "required": ["en", "ru", "zh"],
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "default": ""
+                },
+                "ru": {
+                  "type": "string",
+                  "default": ""
+                },
+                "zh": {
+                  "type": "string",
+                  "default": ""
+                }
+              },
+              "additionalProperties": false
+            },
+            "giver_npc_id": {
+              "type": "string",
+              "default": "",
+              "foreignKey": "npcs"
+            },
+            "is_repeatable": {
+              "type": "boolean",
+              "default": false
+            },
+            "total_loot_xp": {
+              "type": "number",
+              "default": 0,
+              "readOnly": true,
+              "x-formula": {
+                "version": 1,
+                "expression": "sum(steps[*].rewards[*].bonus_xp)"
+              }
+            },
+            "level_required": {
+              "type": "number",
+              "default": 0
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ],
+    "tableId": "quests",
     "changeType": "update"
   }
 ]
