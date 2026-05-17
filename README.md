@@ -32,7 +32,7 @@ The project passport, ADRs, and shared spec live in [`revisium/demo-rpg-docs`](h
 | Resource | Location |
 |---|---|
 | Game-data project (source of truth) | [cloud.revisium.io/revisium/demo-rpg-data](https://cloud.revisium.io/revisium/demo-rpg-data) |
-| Committed schema (15 tables, 31 migrations) | [`revisium/migrations.json`](revisium/migrations.json) |
+| Committed schema (15 tables, 35 migrations) | [`revisium/migrations.json`](revisium/migrations.json) |
 | Committed OpenAPI spec (per-project REST) | [`revisium/openapi.json`](revisium/openapi.json) |
 | Generated typed client | [`src/__generated__/demo-rpg-data/`](src/__generated__/demo-rpg-data/) |
 | Backend-side facade | [`src/features/dictionary/dictionary-api.service.ts`](src/features/dictionary/dictionary-api.service.ts) |
