@@ -2,7 +2,7 @@
 
 NestJS subgraph for **Branching Tales** — an Apollo Router topology federating this service with two Revisium-managed subgraphs hosted on `cloud.revisium.io` (`revisium/demo-rpg-data`, `revisium/demo-rpg-cms`).
 
-The project passport, ADRs, and shared spec live in [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs); this repo is the running NestJS application that wraps and extends the Revisium-hosted game data.
+The lightweight project passport lives in [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs); this repo is the running NestJS application that wraps and extends the Revisium-hosted game data.
 
 ## Role in the demo
 
@@ -187,7 +187,7 @@ See [`docs/getting-started.md`](docs/getting-started.md) for detailed setup.
 | [Environment Variables](ENV.md) | Complete env var reference |
 | [Code Review](REVIEW.md) | Architecture, SOLID, testing, authorization checklist |
 
-Broader project context (passport, ADRs, schemas) lives in [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs).
+Broader project context lives in [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs). Full schema, migration, OpenAPI, and generated-client truth lives in this backend repo.
 
 ## Tech Stack
 
@@ -209,7 +209,7 @@ Broader project context (passport, ADRs, schemas) lives in [`revisium/demo-rpg-d
 
 ## Related repos
 
-- [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs) — project passport, ADRs, schemas, formulas, bootstrap source
+- [`revisium/demo-rpg-docs`](https://github.com/revisium/demo-rpg-docs) — project passport, public architecture summary, product story, bootstrap prompt
 - [`revisium/supergraph-builder`](https://github.com/revisium/supergraph-builder) — composes this subgraph + the two Revisium subgraphs into the Apollo Router supergraph
 - [`revisium/revisium-cli`](https://github.com/revisium/revisium-cli) — the CLI used by `revisium:bootstrap` and the K8s migrations-Job
 - [`revisium/infrastructure`](https://github.com/revisium/infrastructure) — Helm charts + ArgoCD wiring for the dev stand

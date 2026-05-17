@@ -9,9 +9,9 @@ Operational notes for AI coding agents working in `demo-rpg-backend`.
 Router federates this service with `revisium/demo-rpg-data` and
 `revisium/demo-rpg-cms`; `revisium/supergraph-builder` composes the supergraph.
 
-Broader product context, source-of-truth boundaries, ADRs, BRs, and schema
-intent live in `demo-rpg-docs`. This repo owns backend runtime behaviour,
-generated Revisium client artifacts, backend review gates, and backend docs.
+Broader product context and source-of-truth boundaries live in `demo-rpg-docs`.
+This repo owns backend runtime behaviour, generated Revisium client artifacts,
+full schema/migration truth, backend review gates, and backend docs.
 
 ## Start Here
 
@@ -29,7 +29,7 @@ generated Revisium client artifacts, backend review gates, and backend docs.
 
 | Area | Canonical owner |
 |---|---|
-| Product identity, ADRs, BRs, schema intent, capability coverage | `../demo-rpg-docs/` |
+| Product identity, public architecture summary, product story | `../demo-rpg-docs/` |
 | Applied Revisium migrations/OpenAPI/generated backend client | `revisium/`, `src/__generated__/demo-rpg-data/` |
 | Backend runtime architecture, CQRS, auth, MCP, tests | this repo |
 | Cluster manifests, Argo CD, real secret names/values | `../../infrastructure` |
